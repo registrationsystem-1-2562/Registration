@@ -28,14 +28,6 @@
             <v-list-item-title>จัดการปีการศึกษา</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link replace to="/admin/1/database">
-          <v-list-item-action>
-            <v-icon>mdi-database</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>จัดการฐานข้อมูล</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
         <v-list-item link replace to="/admin/1/upload">
           <v-list-item-action>
             <v-icon>mdi-upload</v-icon>
@@ -76,7 +68,7 @@
 
     <v-content>
       <v-container fluid fill-height>
-        <v-layout align-center justify-center>
+        <v-layout>
           <v-flex>
             <router-view></router-view>
           </v-flex>

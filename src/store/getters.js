@@ -10,5 +10,8 @@ export const getters = {
     },
     getError (state) {
         return state.error
+    },
+    getStudyYear (state) {
+        return state.studyYear
     }
 }

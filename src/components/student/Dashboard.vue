@@ -2,7 +2,7 @@
   <v-app>
     <v-navigation-drawer v-model="drawer" app>
       <v-container>
-        <h6 class="title">B60XXXXX</h6>
+        <h6 class="title">{{ this.$store.getters.getUser }}</h6>
       </v-container>
       <v-divider></v-divider>
       <v-list dense>
@@ -54,7 +54,7 @@
 
     <v-content>
       <v-container fluid fill-height>
-        <v-layout align-center justify-center>
+        <v-layout>
           <v-flex>
             <router-view></router-view>
           </v-flex>
