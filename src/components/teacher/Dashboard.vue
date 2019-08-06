@@ -1,9 +1,16 @@
 <template>
   <v-app>
     <v-navigation-drawer v-model="drawer" app>
-      <v-container>
-        <h6 class="title">Profile</h6>
-      </v-container>
+      <v-list danse>
+        <v-list-item link to="/teacher/1/profile">
+          <v-list-item-action>
+            <v-icon>mdi-account-circle</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>โปรไฟล์</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
       <v-divider></v-divider>
       <v-list dense>
         <v-list-item link to>
@@ -25,7 +32,7 @@
       </v-list>
       <v-divider></v-divider>
       <v-list dense>
-        <v-list-item link to>
+        <v-list-item link to="/tlogin">
           <v-list-item-action>
             <v-icon>mdi-account-off</v-icon>
           </v-list-item-action>
@@ -43,8 +50,8 @@
 
     <v-content>
       <v-container fluid fill-height>
-        <v-layout align-center justify-center>
-          <v-flex text-center>
+        <v-layout>
+          <v-flex>
             <router-view />
           </v-flex>
         </v-layout>

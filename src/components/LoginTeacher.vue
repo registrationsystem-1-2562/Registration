@@ -11,7 +11,7 @@
               </v-toolbar>
               <v-card-text>
                 <v-form>
-                  <v-text-field label="รหัสอาจารย์" name="login" type="text" v-model="user.name"></v-text-field>
+                  <v-text-field label="รหัสอาจารย์" name="login" type="text" v-model="user.username"></v-text-field>
 
                   <v-text-field
                     id="password"
@@ -25,7 +25,7 @@
               <v-card-actions>
                 <v-btn text replace to="/home">กลับ</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn color="primary">เข้าสู่ระบบ</v-btn>
+                <v-btn color="primary" @click="login(user)">เข้าสู่ระบบ</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -40,10 +40,15 @@ export default {
   data() {
     return {
       user: {
-        name: null,
+        username: null,
         password: null
       }
     };
+  },
+  methods: {
+    login: function (user) {
+      this.$store.dispatch('loginTeacher', user)
+    }
   }
 };
 </script>

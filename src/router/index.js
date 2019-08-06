@@ -12,7 +12,6 @@ import Dashboard from '../components/admin/Dashboard'
 import Upload from '../components/admin/system/Upload'
 import SchoolYear from '../components/admin/system/SchoolYear'
 import Statistic from '../components/admin/system/Statistic'
-import Database from '../components/admin/system/Database'
 import ManageYear from '../components/admin/system/ManageYear'
 
 // teacher component
@@ -72,10 +71,6 @@ export default new Router({
                 {
                     path: 'statistic',
                     component: Statistic
-                },
-                {
-                    path: 'database',
-                    component: Database
                 },
                 {
                     path: 'manage',
