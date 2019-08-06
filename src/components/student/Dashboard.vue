@@ -6,7 +6,7 @@
       </v-container>
       <v-divider></v-divider>
       <v-list dense>
-        <v-list-item link to="/student/1/project">
+        <v-list-item link :to="routes.project">
           <v-list-item-action>
             <v-icon>mdi-account-check</v-icon>
           </v-list-item-action>
@@ -14,7 +14,7 @@
             <v-list-item-title>ผลการลงทะเบียน</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link to="/student/1/select">
+        <v-list-item link :to="routes.select">
           <v-list-item-action>
             <v-icon>mdi-account-search-outline</v-icon>
           </v-list-item-action>
@@ -22,7 +22,7 @@
             <v-list-item-title>เลือกอาจารย์ที่ปรึกษา</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link to="/student/1/profile">
+        <v-list-item link :to="routes.profile">
           <v-list-item-action>
             <v-icon>mdi-account-search</v-icon>
           </v-list-item-action>
@@ -68,7 +68,12 @@
 export default {
   data() {
     return {
-      drawer: null
+      drawer: null,
+      routes: {
+        project: '/student/ ' + this.$store.getters.getUser + '/project',
+        select: '/student/' + this.$store.getters.getUser + '/select',
+        profile: '/student/' + this.$store.getters.getUser + '/profile'
+      }
     };
   }
 };
