@@ -112,6 +112,18 @@ export const actions = {
                 })
             );
         commit('setLoading', false)
+    },
+
+    // student
+    settingStudent({ commit }, payload) {
+        commit('setLoading', true)
+        firebase.database().ref('student').on('child_added', snapshot => {
+            payload.push({
+                id: snapshot.key,
+                ...snapshot.val()
+            })
+        })
+        commit('setLoading', false)
     }
 
 }
