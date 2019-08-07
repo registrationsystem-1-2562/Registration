@@ -25,6 +25,7 @@ import StudentDashboard from '../components/student/Dashboard'
 import SelectProject from '../components/student/system/SelectProject'
 import ViewProfile from '../components/student/system/ViewProfile'
 import ViewProject from '../components/student/system/ViewProject'
+import StudentProfile from '../components/student/system/Profile'
 
 Vue.use(Router)
 
@@ -107,12 +108,16 @@ export default new Router({
                     component: SelectProject
                 },
                 {
-                    path: 'profile',
+                    path: 'teacher',
                     component: ViewProfile
                 },
                 {
                     path: 'project',
                     component: ViewProject
+                },
+                {
+                    path: 'profile',
+                    component: StudentProfile
                 }
             ]
         }

@@ -1,9 +1,16 @@
 <template>
   <v-app>
     <v-navigation-drawer v-model="drawer" app>
-      <v-container>
-        <h6 class="title">{{ this.$store.getters.getUser }}</h6>
-      </v-container>
+      <v-list danse>
+        <v-list-item link :to="routes.profile">
+          <v-list-item-action>
+            <v-icon>mdi-account-circle</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>{{ this.$store.getters.getUser }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
       <v-divider></v-divider>
       <v-list dense>
         <v-list-item link :to="routes.project">
@@ -22,7 +29,7 @@
             <v-list-item-title>เลือกอาจารย์ที่ปรึกษา</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link :to="routes.profile">
+        <v-list-item link :to="routes.teacher">
           <v-list-item-action>
             <v-icon>mdi-account-search</v-icon>
           </v-list-item-action>
@@ -72,7 +79,8 @@ export default {
       routes: {
         project: '/student/ ' + this.$store.getters.getUser + '/project',
         select: '/student/' + this.$store.getters.getUser + '/select',
-        profile: '/student/' + this.$store.getters.getUser + '/profile'
+        profile: '/student/' + this.$store.getters.getUser + '/profile',
+        teacher: '/student/' + this.$store.getters.getUser + '/teacher'
       }
     };
   }
