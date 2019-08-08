@@ -49,7 +49,9 @@ export default {
         firebase.database().ref('lecturer_register/' + 2560).set({
           teacher: this.project,
           student: this.user,
-          gpax: this.profile.gpax
+          gpax: this.profile.gpax,
+          date: new Date().getDate() + '/' + (new Date().getMonth() + 1) + '/' + new Date().getFullYear() + ' '
+          + new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds()
         })
       }
       else {
