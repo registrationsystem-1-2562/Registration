@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" app>
+    <v-navigation-drawer v-model="drawer" app temporary>
       <v-list danse>
         <v-list-item link :to="routes.profile">
           <v-list-item-action>
@@ -77,10 +77,10 @@ export default {
     return {
       drawer: null,
       routes: {
-        project: '/student/ ' + this.$store.getters.getUser + '/project',
-        select: '/student/' + this.$store.getters.getUser + '/select',
-        profile: '/student/' + this.$store.getters.getUser + '/profile',
-        teacher: '/student/' + this.$store.getters.getUser + '/teacher'
+        project: "/student/ " + this.$store.getters.getUser + "/project",
+        select: "/student/" + this.$store.getters.getUser + "/select",
+        profile: "/student/" + this.$store.getters.getUser + "/profile",
+        teacher: "/student/" + this.$store.getters.getUser + "/teacher"
       }
     };
   }

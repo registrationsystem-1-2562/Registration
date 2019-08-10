@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" app>
+    <v-navigation-drawer v-model="drawer" app temporary>
       <v-list danse>
         <v-list-item link :to="routes.profile">
           <v-list-item-action>
