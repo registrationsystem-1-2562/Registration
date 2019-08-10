@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" app>
+    <v-navigation-drawer v-model="drawer" app temporary>
       <v-container>
         <h6 class="title">ปีการศึกษา</h6>
       </v-container>

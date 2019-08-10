@@ -24,6 +24,11 @@
 </template>
 
 <script>
+/**
+ * Uncleaned code
+ * Becareful this component
+ * 
+ */
 import firebase from 'firebase'
 
 export default {
