@@ -124,6 +124,15 @@ export const actions = {
             })
         })
         commit('setLoading', false)
+    },
+    // teacher register
+    teacherRegister({ commit }, payload) {
+        commit('setLoading', true)
+        firebase.database().ref('teacher_register/' + payload.year + '/' + payload.user).set({
+            seat: payload.seat,
+            remain: payload.seat
+        })
+        commit('setLoading', false)
     }
 
 }
