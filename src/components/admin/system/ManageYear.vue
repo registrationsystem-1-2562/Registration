@@ -33,10 +33,15 @@
 </template>
 
 <script>
+import firebase from "firebase";
+
 export default {
   data() {
     return {
       years: [],
+      result: [],
+      teacherRegister: [],
+      studentRegister: [],
       headers: [
         {
           text: "data",
@@ -81,11 +86,37 @@ export default {
   },
   methods: {
     getYear: function(year) {
-      this.$store.commit('setSchoolYear', year)
+      this.$store.commit("setSchoolYear", year);
+    },
+    resultRegister: function() {
+      /**
+       * Very Difficult
+       */
+      // eslint-disable-next-line
+      this.studentRegister.forEach(element => {});
     }
   },
   created() {
-    this.$store.dispatch('settingYear', this.years)
+    this.$store.dispatch("settingYear", this.years);
+    firebase
+      .database()
+      .ref("teacher_register/" + this.$store.getters.getSchoolYear)
+      .on("child_added", snapshot => {
+        this.teacherRegister.push({
+          id: snapshot.key,
+          ...snapshot.val()
+        });
+      });
+
+    firebase
+      .database()
+      .ref("lecturer_register/" + this.$store.getters.getSchoolYear)
+      .on("child_added", snapshot => {
+        this.studentRegister.push({
+          id: snapshot.key,
+          ...snapshot.val()
+        });
+      });
   }
 };
 </script>

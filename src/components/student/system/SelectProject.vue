@@ -18,7 +18,8 @@
       </v-card-actions>
     </v-card>
     <v-snackbar v-model="duplicateError" color="error">
-      ยังไม่ได้เลือกหรือเลือกซ้ำ <v-btn text @click="duplicateError = false">ปิด</v-btn>
+      ยังไม่ได้เลือกหรือเลือกซ้ำ
+      <v-btn text @click="duplicateError = false">ปิด</v-btn>
     </v-snackbar>
   </v-container>
 </template>
@@ -27,9 +28,9 @@
 /**
  * Uncleaned code
  * Becareful this component
- * 
+ *
  */
-import firebase from 'firebase'
+import firebase from "firebase";
 
 export default {
   data() {
@@ -47,25 +48,39 @@ export default {
     };
   },
   methods: {
-    // function validation of select lecturer non duplicate lecturer and non duplicate selected 
-    notDuplicate: function () {
-      this.project = [...new Set([this.first, this.second, this.third, this.forth])]
+    // function validation of select lecturer non duplicate lecturer and non duplicate selected
+    notDuplicate: function() {
+      this.project = [
+        ...new Set([this.first, this.second, this.third, this.forth])
+      ];
       if (this.project.length === 4) {
-        firebase.database().ref('lecturer_register/' + 2560).set({
-          teacher: this.project,
-          student: this.user,
-          gpax: this.profile.gpax,
-          date: new Date().getDate() + '/' + (new Date().getMonth() + 1) + '/' + new Date().getFullYear() + ' '
-          + new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds()
-        })
-      }
-      else {
-        this.duplicateError = true
+        firebase
+          .database()
+          .ref("lecturer_register/" + 2560 + this.user)
+          .set({
+            teacher: this.project,
+            student: this.user,
+            gpax: this.profile.gpax,
+            date:
+              new Date().getDate() +
+              "/" +
+              (new Date().getMonth() + 1) +
+              "/" +
+              new Date().getFullYear() +
+              " " +
+              new Date().getHours() +
+              ":" +
+              new Date().getMinutes() +
+              ":" +
+              new Date().getSeconds()
+          });
+      } else {
+        this.duplicateError = true;
       }
     }
   },
   created() {
-    this.$store.dispatch('settingStudent', this.students)
+    this.$store.dispatch("settingStudent", this.students);
     this.$store.dispatch("settingTeacher", this.teachers);
     this.students.forEach(value => {
       if (value.id === this.user) {
@@ -77,7 +92,7 @@ export default {
         };
         return;
       }
-    })
-  },
+    });
+  }
 };
 </script>

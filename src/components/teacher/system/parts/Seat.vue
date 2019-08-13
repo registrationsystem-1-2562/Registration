@@ -35,7 +35,6 @@
   </v-dialog>
 </template>
 
-
 <script>
 export default {
   props: ["dialog"],
@@ -65,6 +64,10 @@ export default {
   },
   created() {
     this.$store.dispatch("settingYear", this.years);
+    this.$store.dispatch("updateYear", this.years)
+    this.years = this.years.filter(year => {
+      year.status === true
+    })
   }
 };
 </script>
