@@ -2,7 +2,7 @@
   <v-app>
     <v-navigation-drawer v-model="drawer" app temporary>
       <v-list danse>
-        <v-list-item link :to="routes.profile">
+        <v-list-item link to="profile">
           <v-list-item-action>
             <v-icon>mdi-account-circle</v-icon>
           </v-list-item-action>
@@ -13,7 +13,7 @@
       </v-list>
       <v-divider></v-divider>
       <v-list dense>
-        <v-list-item link :to="routes.notice">
+        <v-list-item link to="notice">
           <v-list-item-action>
             <v-icon>mdi-bulletin-board</v-icon>
           </v-list-item-action>
@@ -21,7 +21,7 @@
             <v-list-item-title>ประกาศ</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link :to="routes.reg">
+        <v-list-item link to="reg">
           <v-list-item-action>
             <v-icon>mdi-calendar-account</v-icon>
           </v-list-item-action>
@@ -65,11 +65,6 @@ export default {
   data() {
     return {
       drawer: null,
-      routes: {
-        profile: '/teacher ' + this.$store.getters.getUser + '/profile',
-        notice: '/teacher/' + this.$store.getters.getUser + '/notice',
-        reg: '/teacher/' + this.$store.getters.getUser + '/reg'
-      }
     };
   }
 };
