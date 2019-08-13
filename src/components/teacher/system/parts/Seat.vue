@@ -28,6 +28,10 @@
         <v-btn raised color="primary" @click.prevent="teacherRegister">ลงทะเบียน</v-btn>
       </v-card-actions>
     </v-card>
+    <v-snackbar>
+      ไม่สามารถลงทะเบียนได้
+      <v-btn text>ปิด</v-btn>
+    </v-snackbar>
   </v-dialog>
 </template>
 
@@ -42,7 +46,8 @@ export default {
         seat: 0,
         user: this.$store.getters.getUser,
         year: this.$store.getters.getSchoolYear
-      }
+      },
+      errorSnackbar: false
     };
   },
   methods: {
@@ -50,8 +55,12 @@ export default {
       this.$store.commit("setSchoolYear", year);
     },
     teacherRegister: function() {
-      this.$store.dispatch("teacherRegister", this.register);
-      this.dialog = !this.dialog;
+      if (this.register.year) {
+        this.$store.dispatch("teacherRegister", this.register);
+        this.dialog = !this.dialog;
+      } else {
+        this.errorSnackbar = true
+      }
     }
   },
   created() {
