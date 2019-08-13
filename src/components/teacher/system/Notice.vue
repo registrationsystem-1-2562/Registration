@@ -22,10 +22,7 @@
                 <v-responsive>
                     <v-flex>
                         <v-card class="mx-auto" max-width="80%">
-                            <v-toolbar>
-                                <v-toolbar-title>สร้างประกาศ</v-toolbar-title>
-                                <v-spacer></v-spacer>
-                            </v-toolbar>
+                            <v-card-title>สร้างประกาศ</v-card-title>
                             <v-card-text>
                                 <v-form>
                                 <v-text-field 
@@ -45,7 +42,7 @@
                                 </v-form>
                             </v-card-text>
                             <v-card-actions>
-                                <v-btn >Clear</v-btn>
+                                <v-btn text>Clear</v-btn>
                                 <v-spacer></v-spacer>
                                 <v-btn color="primary">Post</v-btn>
                             </v-card-actions>
