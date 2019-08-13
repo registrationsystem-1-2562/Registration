@@ -3,8 +3,10 @@
     <v-container row>
       <h6 class="title">สถิติการลงทะเบียน</h6>
       <v-spacer></v-spacer>
-      <v-btn color="success">
-        <v-icon>mdi-download</v-icon>ดาวน์โหลด
+      <v-btn color="info">
+        <v-download-csv :data="records">
+          <v-icon>mdi-cloud-download-outline</v-icon> Download
+        </v-download-csv>
       </v-btn>
     </v-container>
     <v-data-table :headers="headers" :items="records" class="elevation-1" :items-per-page="5"></v-data-table>
@@ -12,6 +14,11 @@
 </template>
 
 <script>
+import Vue from "vue";
+import JsonCSV from "vue-json-csv";
+
+Vue.component("VDownloadCsv", JsonCSV);
+
 export default {
   data() {
     return {

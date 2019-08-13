@@ -30,6 +30,7 @@ import StudentProfile from '../components/student/system/Profile'
 Vue.use(Router)
 
 export default new Router({
+    mode: 'history',
     routes: [
         {
             path: '/',
@@ -62,6 +63,10 @@ export default new Router({
             component: Dashboard,
             children: [
                 {
+                    path: '',
+                    redirect: 'schoolyear'
+                },
+                {
                     path: 'schoolyear',
                     component: SchoolYear
                 },
@@ -85,6 +90,10 @@ export default new Router({
             component: TeacherDashBoard,
             children: [
                 {
+                    path: '',
+                    redirect: 'notice'
+                },
+                {
                     path: 'notice',
                     component: Notice
                 },
@@ -103,6 +112,10 @@ export default new Router({
             path: '/student/:id',
             component: StudentDashboard,
             children: [
+                {
+                    path: '',
+                    redirect: 'select'
+                },
                 {
                     path: 'select',
                     component: SelectProject

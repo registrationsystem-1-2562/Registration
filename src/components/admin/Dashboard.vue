@@ -6,7 +6,7 @@
       </v-container>
       <v-divider></v-divider>
       <v-list dense>
-        <v-list-item link :to="routes.manage">
+        <v-list-item link to="manage">
           <v-list-item-action>
             <v-icon>mdi-calendar-account</v-icon>
           </v-list-item-action>
@@ -20,7 +20,7 @@
       </v-container>
       <v-divider></v-divider>
       <v-list dense>
-        <v-list-item link replace :to="routes.schoolyear">
+        <v-list-item link replace to="schoolyear">
           <v-list-item-action>
             <v-icon>mdi-package</v-icon>
           </v-list-item-action>
@@ -28,7 +28,7 @@
             <v-list-item-title>จัดการปีการศึกษา</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link replace :to="routes.upload">
+        <v-list-item link replace to="upload">
           <v-list-item-action>
             <v-icon>mdi-upload</v-icon>
           </v-list-item-action>
@@ -36,7 +36,7 @@
             <v-list-item-title>อัปโหลดข้อมูลนักศึกษา</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link replace :to="routes.statistic">
+        <v-list-item link replace to="statistic">
           <v-list-item-action>
             <v-icon>mdi-chart-timeline-variant</v-icon>
           </v-list-item-action>
@@ -83,12 +83,6 @@ export default {
   data() {
     return {
       drawer: null,
-      routes: {
-        schoolyear: '/admin/ ' + this.$store.getters.getUser + '/schoolyear',
-        manage: '/admin/' + this.$store.getters.getUser + '/manage',
-        upload: '/admin/' + this.$store.getters.getUser + '/upload',
-        statistic: '/admin/' + this.$store.getters.getUser + '/statistic'
-      }
     };
   }
 };
