@@ -93,7 +93,42 @@ export default {
        * Very Difficult
        */
       // eslint-disable-next-line
-      this.studentRegister.forEach(element => {});
+      this.studentRegister.forEach(student => {
+        let remainer = true;
+        for (let i = 0; i < student.teacher.length; i++) {
+          let teacher = this.teacherRegister.find(teacher => {
+            teacher.id === student.teacher[i];
+          });
+          if (teacher.remain !== 0) {
+            this.result.push({
+              student: student.id,
+              teacher: teacher.id
+            });
+            // set remain decrease by 1
+            teacher.remain--;
+            break;
+          }
+          if (i === student.teacher.length - 1) {
+            remainer = false;
+          }
+        }
+
+        // if every teacher seat remain = 0
+        if (!remainer) {
+          this.teacherRegister.sort((a, b) => {
+            return a['seat'] - b['seat']
+          })
+          this.result.push({
+            student: student.id,
+            teacher: this.teacherRegister[0].id
+          })
+          this.teacherRegister[0].seat++
+        }
+      });
+
+      firebase.database().ref('result_register/' + this.$store.getters.getSchoolYear).set({
+        ...this.result
+      })
     }
   },
   created() {
@@ -117,6 +152,14 @@ export default {
           ...snapshot.val()
         });
       });
+    /*
+     * multiple sort by GPAX and Date
+     * GPAX greatest to least
+     * Date before to after
+     */
+    this.studentRegister.sort((a, b) => {
+      return b["gpax"] - a["gpax"] || a["date"] - b["date"];
+    });
   }
 };
 </script>
