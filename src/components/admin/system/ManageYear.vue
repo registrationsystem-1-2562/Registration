@@ -102,7 +102,8 @@ export default {
           if (teacher.remain !== 0) {
             this.result.push({
               student: student.id,
-              teacher: teacher.id
+              teacher: teacher.id,
+              gpax: student.gpax
             });
             // set remain decrease by 1
             teacher.remain--;
@@ -120,7 +121,8 @@ export default {
           })
           this.result.push({
             student: student.id,
-            teacher: this.teacherRegister[0].id
+            teacher: this.teacherRegister[0].id,
+            gpax: student.gpax
           })
           this.teacherRegister[0].seat++
         }

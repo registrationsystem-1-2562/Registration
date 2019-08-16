@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card class="elevation-3 mx-auto" max-width="510">
+    <v-card class="elevation-3 mx-auto" max-width="800">
       <v-card-title>ข้อมูลอาจารย์ที่ปรึกษา</v-card-title>
       <v-card-text>
         <v-layout wrap align-start column>

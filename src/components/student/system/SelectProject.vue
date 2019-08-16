@@ -5,10 +5,7 @@
       <v-card-text>
         <v-layout column>
           <v-flex>
-            <v-select label="อันดับ 1" :items="teachers" v-model="first"></v-select>
-            <v-select label="อันดับ 2" :items="teachers" v-model="second"></v-select>
-            <v-select label="อันดับ 3" :items="teachers" v-model="third"></v-select>
-            <v-select label="อันดับ 4" :items="teachers" v-model="forth"></v-select>
+            <v-select :label="i+1" :items="teachers" v-for="(teacher, i) in teachers" :key="i" v-model="selected[i]"></v-select>
           </v-flex>
         </v-layout>
       </v-card-text>
@@ -39,40 +36,39 @@ export default {
       students: [],
       user: this.$store.getters.getUser,
       profile: {},
-      first: null,
-      second: null,
-      third: null,
-      forth: null,
+      selected: [],
       project: [],
-      duplicateError: false
+      duplicateError: false,
+      register: []
     };
   },
   methods: {
     // function validation of select lecturer non duplicate lecturer and non duplicate selected
     notDuplicate: function() {
+      let date = new Date()
       this.project = [
-        ...new Set([this.first, this.second, this.third, this.forth])
+        ...new Set(this.selected)
       ];
-      if (this.project.length === 4) {
+      if (this.project.length === this.teachers.length) {
         firebase
           .database()
-          .ref("lecturer_register/" + 2560 + this.user)
+          .ref("lecturer_register/" + 2560 + '/' + this.user)
           .set({
             teacher: this.project,
             student: this.user,
             gpax: this.profile.gpax,
             date:
-              new Date().getDate() +
+              date.getDate() +
               "/" +
-              (new Date().getMonth() + 1) +
+              (date.getMonth() + 1) +
               "/" +
-              new Date().getFullYear() +
+              date.getFullYear() +
               " " +
-              new Date().getHours() +
+              date.getHours() +
               ":" +
-              new Date().getMinutes() +
+              date.getMinutes() +
               ":" +
-              new Date().getSeconds()
+              date.getSeconds()
           });
       } else {
         this.duplicateError = true;
@@ -82,6 +78,7 @@ export default {
   created() {
     this.$store.dispatch("settingStudent", this.students);
     this.$store.dispatch("settingTeacher", this.teachers);
+
     this.students.forEach(value => {
       if (value.id === this.user) {
         this.profile = {
@@ -93,6 +90,27 @@ export default {
         return;
       }
     });
+    /* eslint-disable */ 
+    firebase.database().ref('teacher_register/' + this.profile.year)
+      .on('child_added', snapshot => {
+        this.register.push(snapshot.key)
+        console.log(this.register)
+      })
+
+    let filterTeacher = []
+    this.teachers.forEach(snapshot => {
+      for (let i = 0; i < this.register.length; i++) {
+        if (snapshot.value === this.register[i]) {
+          filterTeacher.push({
+            value: snapshot.value,
+            text: snapshot.text
+          })
+          break
+        }
+      }
+    })
+
+    this.teachers = filterTeacher
   }
 };
 </script>
