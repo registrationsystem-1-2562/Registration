@@ -128,10 +128,12 @@ export const actions = {
     // teacher register
     teacherRegister({ commit }, payload) {
         commit('setLoading', true)
-        firebase.database().ref('teacher_register/' + payload.year + '/' + payload.user).set({
-            seat: payload.seat,
-            remain: payload.seat
-        })
+        if (payload.seat !== 0) {
+            firebase.database().ref('teacher_register/' + payload.year + '/' + payload.user).set({
+                seat: payload.seat,
+                remain: payload.seat
+            })
+        }
         commit('setLoading', false)
     }
 

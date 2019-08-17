@@ -6,13 +6,13 @@ import { store } from './store'
 import firebase from 'firebase'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC1Bq9bLBSFSN_XIpHDIZOpfAXFHsmN9Js",
-  authDomain: "register-4ea5e.firebaseapp.com",
-  databaseURL: "https://register-4ea5e.firebaseio.com",
-  projectId: "register-4ea5e",
-  storageBucket: "",
-  messagingSenderId: "740307130649",
-  appId: "1:740307130649:web:8ee2bb467eb6fd14"
+  apiKey: "AIzaSyB3eOcFQvZC85B_OdyDIXY3gytdOrhOICE",
+  authDomain: "cpe-projectregbot-bumgbp.firebaseapp.com",
+  databaseURL: "https://cpe-projectregbot-bumgbp.firebaseio.com",
+  projectId: "cpe-projectregbot-bumgbp",
+  storageBucket: "cpe-projectregbot-bumgbp.appspot.com",
+  messagingSenderId: "619014354888",
+  appId: "1:619014354888:web:de3335e734b5ab83"
 };
 
 firebase.initializeApp(firebaseConfig)

@@ -19,7 +19,6 @@
         <v-spacer></v-spacer>
         <v-text-field
           label="จำนวนที่นั่ง"
-          hint="สามารถงดรับนักศึกษาได้โดยใส่เลข 0"
           v-model="register.seat"
         ></v-text-field>
       </v-card-text>

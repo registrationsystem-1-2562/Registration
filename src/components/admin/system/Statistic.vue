@@ -4,7 +4,7 @@
       <h6 class="title">สถิติการลงทะเบียน</h6>
       <v-spacer></v-spacer>
       <v-btn color="info">
-        <v-download-csv :data="records">
+        <v-download-csv :data="records" name="statistic.csv" encoding="UTF8">
           <v-icon>mdi-cloud-download-outline</v-icon> Download
         </v-download-csv>
       </v-btn>
