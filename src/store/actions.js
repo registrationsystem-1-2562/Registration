@@ -136,22 +136,16 @@ export const actions = {
         }
         commit('setLoading', false)
     },
-    //teacher notice
-    message({ commit }, payload) {
+
+    //notice
+    setNotice( {commit} , payload) {
         commit('setLoading', true)
-        firebase
-            .database()
-            .ref("notice")
-            .on("child_added", snapshot =>
-                payload.push({
-                    value: snapshot.key,
-                    text:
-                        snapshot.val().title +
-                        " " +
-                        snapshot.val().information
-                })
-            );
-        commit('setLoading', false)
-    },
+        firebase.database().ref('notice/' + payload).set({
+          title: payload.title,
+          information: payload.information
+        });
+      }
+      
+    
 
 }

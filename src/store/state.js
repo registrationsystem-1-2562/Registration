@@ -4,5 +4,8 @@ export const state = {
     loading: false,
     error: null,
     studyYear: null,
-    noticeState: null
+    noticeState: {
+        title:"แจ้งเตือน",
+        information:"รายละเอียด"
+    }
 }

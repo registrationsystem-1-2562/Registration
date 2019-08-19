@@ -1,12 +1,12 @@
 <template>
     <v-container>    
-        <v-container>
+        <v-container> <!--dense v-for="(message, i) in noticeState" :key="i"-->
           <form>
-            <v-card class="mx-auto" max-width="70%" color="#ffe4c4"> <!-- color="#ffe4c4"-->
+            <v-card class="mx-auto" max-width="70%" color="#ffe4c4"> 
                 <v-responsive>
-                    <v-card-title>{{title}}</v-card-title>
-                    <v-card-text>
-                        &emsp;&emsp;{{information}}
+                    <v-card-title v-text="noticeState.title"></v-card-title>
+                    <v-card-text v-text="noticeState.information">
+                        &emsp;&emsp;
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
@@ -47,7 +47,7 @@
                             </v-card-text>
                             <v-card-actions><v-spacer></v-spacer>
                                 <v-btn @click="clearMessage" color="#abb2b9">Clear</v-btn>
-                                <v-btn @click="storeMessage" color="primary">Post</v-btn>
+                                <v-btn @click="storeMessage(title,information)" color="primary">Post</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-flex>
@@ -65,7 +65,7 @@ export default {
     return {
         title: 'title Text',
         information: 'information Text',
-        messages:[]
+        //messages:[]
     };
   },
     computed: {
@@ -75,19 +75,17 @@ export default {
     },
     methods:{
       storeMessage:function(){
-          //this.$store.dispatch('message', { title: this.title, information: this.information })
-          this.messages.push({title:this.title,information:this.information})
-          //this.notice.title='';
-          //this.notice.information='';
-          //console.log(this.messages);
+        //   console.log(this.title,this.information);
+        //   this.title='';
+        //   this.information='';
+        //this.messages.push({titleMessage:this.title,informationMessage:this.information})
+        this.$store.commit('setNotice', { title: this.title, information: this.information })
+          
       },
       clearMessage:function(){
-          this.notice.title='';
-          this.notice.information='';
-      }
-    },
-    create(){
-          this.$store.dispatch('message', { title: this.title, information: this.information })
+          this.title='';
+          this.information='';
+      },
     }
   
 };

@@ -16,5 +16,6 @@ export const mutations = {
     },
     setNotice (state, payload){
         state.noticeState = payload
+       
     }
 }
