@@ -3,5 +3,6 @@ export const state = {
     schoolYear: null,
     loading: false,
     error: null,
-    studyYear: null
+    studyYear: null,
+    noticeState: null
 }

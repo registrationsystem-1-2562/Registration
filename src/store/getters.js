@@ -13,5 +13,8 @@ export const getters = {
     },
     getStudyYear (state) {
         return state.studyYear
+    },
+    getNotice(state){
+        return state.noticeState
     }
 }
