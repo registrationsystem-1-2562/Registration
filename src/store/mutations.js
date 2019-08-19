@@ -13,5 +13,8 @@ export const mutations = {
     },
     setStudyYear (state, payload) {
         state.studyYear = payload
+    },
+    setNotice (state, payload){
+        state.noticeState = payload
     }
 }
