@@ -17,7 +17,7 @@
         </v-flex>
         <v-spacer></v-spacer>
         <v-flex xs12 sm6 md4 d-flex>
-          <v-btn color="primary" class="mx-auto xs-auto">จัดที่นักศึกษา</v-btn>
+          <v-btn color="primary" class="mx-auto xs-auto" @click="resultRegister">จัดที่นักศึกษา</v-btn>
         </v-flex>
       </v-layout>
     </v-container>
@@ -96,9 +96,9 @@ export default {
       this.studentRegister.forEach(student => {
         let remainer = true;
         for (let i = 0; i < student.teacher.length; i++) {
-          let teacher = this.teacherRegister.find(teacher => {
-            teacher.id === student.teacher[i];
-          });
+          let teacher = this.teacherRegister.find(teacher => 
+            teacher.id === student.teacher[i]
+          );
           if (teacher.remain !== 0) {
             this.result.push({
               student: student.id,
@@ -109,7 +109,7 @@ export default {
             teacher.remain--;
             break;
           }
-          if (i === student.teacher.length - 1) {
+          else if (i === student.teacher.length - 1) {
             remainer = false;
           }
         }
@@ -162,6 +162,9 @@ export default {
     this.studentRegister.sort((a, b) => {
       return b["gpax"] - a["gpax"] || a["date"] - b["date"];
     });
+    /* eslint-disable */ 
+    console.log(this.studentRegister)
+    console.log(this.teacherRegister)
   }
 };
 </script>

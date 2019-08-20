@@ -38,28 +38,23 @@ export default new Router({
         },
         {
             path: '/home',
-            name: 'Home',
             component: Home
         },
         {
             path: '/slogin',
-            name: 'LoginStudent',
             component: LoginStudent
         },
         {
             path: '/tlogin',
-            name: 'LoginTeacher',
             component: LoginTeacher
         },
         {
             path: '/alogin',
-            name: 'Login',
             component: Login,
         },
         {
             // admin route
             path: '/admin/:id',
-            name: 'Dashboard',
             component: Dashboard,
             children: [
                 {

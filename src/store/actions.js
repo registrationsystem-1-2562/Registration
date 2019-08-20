@@ -11,7 +11,6 @@ export const actions = {
                     if (v.val().username === payload.username && v.val().password.toString() === payload.password) {
                         commit('setUser', payload.username)
                         router.push('/admin/' + payload.username)
-                        return
                     }
                 })
             })
@@ -25,7 +24,6 @@ export const actions = {
                     if (v.val().username === payload.username && v.val().password.toString() === payload.password) {
                         commit('setUser', payload.username)
                         router.push('/teacher/' + payload.username)
-                        return
                     }
                 })
             })
@@ -39,7 +37,6 @@ export const actions = {
                     if (v.val().username === payload.username && v.val().password.toString() === payload.password) {
                         commit('setUser', payload.username)
                         router.push('/student/' + payload.username)
-                        return
                     }
                 })
             })

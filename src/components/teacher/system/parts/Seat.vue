@@ -53,7 +53,7 @@ export default {
       this.$store.commit("setSchoolYear", year);
     },
     teacherRegister: function() {
-      if (this.register.year) {
+      if (this.register.year !== null) {
         this.$store.dispatch("teacherRegister", this.register);
         this.dialog = !this.dialog;
       } else {
@@ -64,9 +64,9 @@ export default {
   created() {
     this.$store.dispatch("settingYear", this.years);
     this.$store.dispatch("updateYear", this.years)
-    this.years = this.years.filter(year => {
+    this.years = this.years.filter(year => 
       year.status === true
-    })
+    )
   }
 };
 </script>
