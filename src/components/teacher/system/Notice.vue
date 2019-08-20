@@ -33,7 +33,7 @@
                                     label="เรื่องประกาศ" 
                                     name="title" 
                                     type="text" 
-                                    v-model="title">
+                                    v-model="message.title">
                                 </v-text-field>
 
                                 <v-textarea
@@ -41,13 +41,13 @@
                                     name="information"
                                     label="รายละเอียด"
                                     type="text"
-                                    v-model="information"
+                                    v-model="message.information"
                                 ></v-textarea>
                                 </v-form>
                             </v-card-text>
                             <v-card-actions><v-spacer></v-spacer>
                                 <v-btn @click="clearMessage" color="#abb2b9">Clear</v-btn>
-                                <v-btn @click="storeMessage(title,information)" color="primary">Post</v-btn>
+                                <v-btn @click="storeMessage" color="primary">Post</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-flex>
@@ -63,10 +63,12 @@
 export default {
   data() {
     return {
-        title: 'title Text',
-        information: 'information Text',
-        //messages:[]
-    };
+        message:{
+            title: 'title Text',
+            information: 'information Text',
+            user: this.$store.getters.getUser
+        }
+    }
   },
     computed: {
       noticeState() {
@@ -75,18 +77,17 @@ export default {
     },
     methods:{
       storeMessage:function(){
-        //   console.log(this.title,this.information);
-        //   this.title='';
-        //   this.information='';
-        //this.messages.push({titleMessage:this.title,informationMessage:this.information})
-        this.$store.commit('setNotice', { title: this.title, information: this.information })
-          
+        //this.messages.push({title:this.title,information:this.information})
+        this.$store.dispatch('setNotice', this.message)
+        this.title='';
+        this.information=''; 
+        //console.log(this.title,this.information); 
       },
       clearMessage:function(){
           this.title='';
           this.information='';
       },
-    }
+    },
   
 };
 </script>
