@@ -140,11 +140,12 @@ export const actions = {
     //notice
     setNotice( {commit} , payload) {
         commit('setLoading', true)
-        firebase.database().ref('notice/' + payload).set({
+        firebase.database().ref('notice/' + payload.title).set({
           title: payload.title,
           information: payload.information
         });
-      }
+        commit('setLoading', false)
+    }
       
     
 
