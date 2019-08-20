@@ -52,7 +52,7 @@ export default {
       if (this.project.length === this.teachers.length) {
         firebase
           .database()
-          .ref("lecturer_register/" + 2560 + '/' + this.user)
+          .ref("lecturer_register/" + this.profile.year + '/' + this.user)
           .set({
             teacher: this.project,
             student: this.user,
