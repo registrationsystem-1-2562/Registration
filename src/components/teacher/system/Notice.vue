@@ -33,7 +33,7 @@
                                     label="เรื่องประกาศ" 
                                     name="title" 
                                     type="text" 
-                                    v-model="title">
+                                    v-model="message.title">
                                 </v-text-field>
 
                                 <v-textarea
@@ -41,7 +41,7 @@
                                     name="information"
                                     label="รายละเอียด"
                                     type="text"
-                                    v-model="information"
+                                    v-model="message.information"
                                 ></v-textarea>
                                 </v-form>
                             </v-card-text>
@@ -63,8 +63,11 @@
 export default {
   data() {
     return {
-        title: 'title Text',
-        information: 'information Text',
+        message:{
+            title: 'title Text',
+            information: 'information Text',
+            user: this.$store.getters.getUser
+        }
     }
   },
     computed: {
@@ -75,10 +78,10 @@ export default {
     methods:{
       storeMessage:function(){
         //this.messages.push({title:this.title,information:this.information})
-        this.$store.dispatch('setNotice', { title: this.title, information: this.information })
-        //   console.log(this.title,this.information);
+        this.$store.dispatch('setNotice', this.message)
         this.title='';
-        this.information='';  
+        this.information=''; 
+        //console.log(this.title,this.information); 
       },
       clearMessage:function(){
           this.title='';
