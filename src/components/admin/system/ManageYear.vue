@@ -21,14 +21,26 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <v-data-table
-      hide-default-header
-      hide-default-footer
-      :headers="headers"
-      :items="records"
-      class="elevation-1"
-      :items-per-page="7"
-    ></v-data-table>
+    <v-simple-table>
+      <tbody>
+        <tr>
+          <td>นักศึกษา</td>
+          <td>{{ register.studentCount }}</td>
+        </tr>
+        <tr>
+          <td>อาจารย์</td>
+          <td>{{ register.teacherCount }}</td>
+        </tr>
+        <tr>
+          <td>นักศึกษาลงทะเบียน</td>
+          <td>{{ register.studentReg }}</td>
+        </tr>
+        <tr>
+          <td>อาจารย์ลงทะเบียน</td>
+          <td>{{ register.teacherReg}}</td>
+        </tr>
+      </tbody>
+    </v-simple-table>
   </v-container>
 </template>
 
@@ -42,46 +54,14 @@ export default {
       result: [],
       teacherRegister: [],
       studentRegister: [],
-      headers: [
-        {
-          text: "data",
-          value: "data"
-        },
-        {
-          text: "count",
-          value: "count"
-        }
-      ],
-      records: [
-        {
-          data: "นักศึกษา",
-          count: 154
-        },
-        {
-          data: "อาจารย์",
-          count: 11
-        },
-        {
-          data: "นักศึกษาลงทะเบียนแล้ว",
-          count: 3
-        },
-        {
-          data: "อาจารย์ลงทะเบียนแล้ว",
-          count: 4
-        },
-        {
-          data: "ยังไม่ลงทะเบียน",
-          count: 151
-        },
-        {
-          data: "จำนวนที่รับนักศึกษา",
-          count: 100
-        },
-        {
-          data: "ที่ว่างสำหรับลงทะเบียน",
-          count: 100
-        }
-      ]
+      students: [],
+      teachers: [],
+      register: {
+        studentCount: 0,
+        teacherCount: 0,
+        studentReg: 0,
+        teacherReg: 0
+      }
     };
   },
   methods: {
@@ -96,8 +76,8 @@ export default {
       this.studentRegister.forEach(student => {
         let remainer = true;
         for (let i = 0; i < student.teacher.length; i++) {
-          let teacher = this.teacherRegister.find(teacher => 
-            teacher.id === student.teacher[i]
+          let teacher = this.teacherRegister.find(
+            teacher => teacher.id === student.teacher[i]
           );
           if (teacher.remain !== 0) {
             this.result.push({
@@ -108,8 +88,7 @@ export default {
             // set remain decrease by 1
             teacher.remain--;
             break;
-          }
-          else if (i === student.teacher.length - 1) {
+          } else if (i === student.teacher.length - 1) {
             remainer = false;
           }
         }
@@ -117,20 +96,23 @@ export default {
         // if every teacher seat remain = 0
         if (!remainer) {
           this.teacherRegister.sort((a, b) => {
-            return a['seat'] - b['seat']
-          })
+            return a["seat"] - b["seat"];
+          });
           this.result.push({
             student: student.id,
             teacher: this.teacherRegister[0].id,
             gpax: student.gpax
-          })
-          this.teacherRegister[0].seat++
+          });
+          this.teacherRegister[0].seat++;
         }
       });
 
-      firebase.database().ref('result_register/' + this.$store.getters.getSchoolYear).set({
-        ...this.result
-      })
+      firebase
+        .database()
+        .ref("result_register/" + this.$store.getters.getSchoolYear)
+        .set({
+          ...this.result
+        });
     }
   },
   created() {
@@ -162,9 +144,15 @@ export default {
     this.studentRegister.sort((a, b) => {
       return b["gpax"] - a["gpax"] || a["date"] - b["date"];
     });
-    /* eslint-disable */ 
-    console.log(this.studentRegister)
-    console.log(this.teacherRegister)
+  },
+  mounted() {
+    this.$store.dispatch("settingStudent", this.students);
+    this.$store.dispatch("settingTeacher", this.teachers);
+
+    this.register.studentCount = this.students.length;
+    this.register.teacherCount = this.teachers.length;
+    this.register.studentReg = this.studentRegister.length
+    this.register.teacherReg = this.teacherRegister.length
   }
 };
 </script>

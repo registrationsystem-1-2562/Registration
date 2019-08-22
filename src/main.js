@@ -5,6 +5,10 @@ import router from './router'
 import { store } from './store'
 import firebase from 'firebase'
 
+import VuejsonToCsv from 'vue-json-to-csv'
+
+Vue.use(VuejsonToCsv)
+
 const firebaseConfig = {
   apiKey: "AIzaSyB3eOcFQvZC85B_OdyDIXY3gytdOrhOICE",
   authDomain: "cpe-projectregbot-bumgbp.firebaseapp.com",
