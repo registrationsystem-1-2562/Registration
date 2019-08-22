@@ -21,26 +21,7 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <v-simple-table>
-      <tbody>
-        <tr>
-          <td>นักศึกษา</td>
-          <td>{{ register.studentCount }}</td>
-        </tr>
-        <tr>
-          <td>อาจารย์</td>
-          <td>{{ register.teacherCount }}</td>
-        </tr>
-        <tr>
-          <td>นักศึกษาลงทะเบียน</td>
-          <td>{{ register.studentReg }}</td>
-        </tr>
-        <tr>
-          <td>อาจารย์ลงทะเบียน</td>
-          <td>{{ register.teacherReg}}</td>
-        </tr>
-      </tbody>
-    </v-simple-table>
+    <!-- data table -->
   </v-container>
 </template>
 
@@ -52,27 +33,62 @@ export default {
     return {
       years: [],
       result: [],
+      // teacher register
       teacherRegister: [],
+      // lecturer register
       studentRegister: [],
-      students: [],
-      teachers: [],
-      register: {
-        studentCount: 0,
-        teacherCount: 0,
-        studentReg: 0,
-        teacherReg: 0
-      }
+      teacherCount: []
     };
   },
   methods: {
     getYear: function(year) {
       this.$store.commit("setSchoolYear", year);
     },
+    statisticRegister: function() {
+      // get all teacher
+      this.result.forEach(snapshot => {
+        this.teacherCount.push(snapshot.teacher);
+      });
+      // unique teacher
+      this.teacherCount = [...new Set(this.teacherCount)];
+      for (let i = 0; i < this.teacherCount; i++) {
+        let maxGpax = 0,
+          minGpax = 4,
+          count = 0,
+          mean = 0,
+          teacher = "";
+        this.result.forEach(snapshot => {
+          if (snapshot.teacher === this.teacherCount[i]) {
+            teacher = snapshot.teacher;
+            if (maxGpax < snapshot.gpax) {
+              maxGpax = snapshot.gpax;
+            }
+            if (minGpax > snapshot.gpax) {
+              minGpax = snapshot.gpax;
+            }
+            mean += snapshot.gpax;
+            count++;
+          }
+        });
+        mean = mean / count;
+        firebase
+          .database()
+          .ref("statistic/" + this.$store.getters.getSchoolYear + "/" + teacher)
+          .set({
+            register: count,
+            max: maxGpax,
+            min: minGpax,
+            mean: mean
+          });
+
+        // *****************************************************************************
+        
+      }
+    },
     resultRegister: function() {
       /**
        * Very Difficult
        */
-      // eslint-disable-next-line
       this.studentRegister.forEach(student => {
         let remainer = true;
         for (let i = 0; i < student.teacher.length; i++) {
@@ -113,6 +129,10 @@ export default {
         .set({
           ...this.result
         });
+
+      // finished and
+      //  store statistic
+      this.statisticRegister;
     }
   },
   created() {
@@ -144,15 +164,6 @@ export default {
     this.studentRegister.sort((a, b) => {
       return b["gpax"] - a["gpax"] || a["date"] - b["date"];
     });
-  },
-  mounted() {
-    this.$store.dispatch("settingStudent", this.students);
-    this.$store.dispatch("settingTeacher", this.teachers);
-
-    this.register.studentCount = this.students.length;
-    this.register.teacherCount = this.teachers.length;
-    this.register.studentReg = this.studentRegister.length
-    this.register.teacherReg = this.teacherRegister.length
   }
 };
 </script>
