@@ -3,23 +3,34 @@
     <v-container row>
       <h6 class="title">สถิติการลงทะเบียน</h6>
       <v-spacer></v-spacer>
-      <v-btn color="info">
-        <v-download-csv :data="records" name="statistic.csv" encoding="UTF8">
-          <v-icon>mdi-cloud-download-outline</v-icon> Download
-        </v-download-csv>
-      </v-btn>
+
+      <vue-json-to-csv
+        csv-title="statistic"
+        :json-data="records"
+        :labels="{teacher: {title: 'teacher'}, 
+                    register: {title: 'register'},
+                    max: {title: 'max'},
+                    min: {title: 'min'},
+                    mean: {title: 'mean'}}"
+        @success="val => handleSuccess(val)"
+        @error="val => handleError(val)"
+      >
+        <v-btn color="info">
+          <v-icon>mdi-cloud-download-outline</v-icon>Download
+        </v-btn>
+      </vue-json-to-csv>
     </v-container>
     <v-data-table :headers="headers" :items="records" class="elevation-1" :items-per-page="5"></v-data-table>
   </v-container>
 </template>
 
 <script>
-import Vue from "vue";
-import JsonCSV from "vue-json-csv";
-
-Vue.component("VDownloadCsv", JsonCSV);
+import VueJsonToCsv from 'vue-json-to-csv'
 
 export default {
+  components: {
+    VueJsonToCsv
+  },
   data() {
     return {
       headers: [
