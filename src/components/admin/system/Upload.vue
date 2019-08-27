@@ -6,18 +6,10 @@
         <v-card-text>
           <v-layout column>
             <v-flex xs12 sm6 md4 d-flex>
-              <v-csv-import v-model="fileInput" :map-fields="headers">
-                <template slot="hasHeaders" slot-scope="{headers, toggle}">
-                  <v-checkbox label="Header?" :value="headers" @change="toggle"></v-checkbox>
-                </template>
-                <template slot="error">ชนิดไฟล์ไม่ถูกต้อง</template>
-                <template slot="next" slot-scope="{load}">
-                  <v-btn @click.prevent="load" class="mt-3" color="primary">โหลดข้อมูล</v-btn>
-                </template>
-                <template slot="submit" slot-scope="{submit}">
-                  <v-btn @click.prevent="submit" color="primary">send!</v-btn>
-                </template>
-              </v-csv-import>
+              <vue-xlsx-table @on-select-file="readXlsx" class="v-btn display-1">Import</vue-xlsx-table>
+            </v-flex>
+            <v-flex>
+              <v-btn color="error" class="mt-3" @click="fileInput = []">Clear</v-btn>
             </v-flex>
             <v-flex>
               <v-btn color="success" class="mt-3" @click="importData">นำเข้าข้อมูล</v-btn>
@@ -56,13 +48,10 @@
 </template>
 
 <script>
-import VCsvImport from "vue-csv-import";
+// import VCsvImport from "vue-csv-import";
 import firebase from 'firebase'
 
 export default {
-  components: {
-    VCsvImport
-  },
   data() {
     return {
       headers: ["รหัสนักศึกษา", "ชื่อ", "สกุล", "ปีการศึกษา", "GPAX"],
@@ -88,6 +77,12 @@ export default {
           })
         })
       }
+    },
+
+    readXlsx: function (convertData) {
+      convertData.body.forEach(data => {
+        this.fileInput.push(data)
+      })
     }
   }
 };

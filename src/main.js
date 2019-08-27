@@ -6,6 +6,9 @@ import { store } from './store'
 import firebase from 'firebase'
 
 import VuejsonToCsv from 'vue-json-to-csv'
+import vueXlsxTable from 'vue-xlsx-table'
+
+Vue.use(vueXlsxTable, {rABS: false})
 
 Vue.use(VuejsonToCsv)
 
