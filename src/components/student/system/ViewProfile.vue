@@ -5,11 +5,11 @@
       <v-card-text>
         <v-layout wrap align-start column>
           <v-flex xs12 sm6 d-flex align-baseline align-content-space-around>
-            <v-select label="เลือกอาจารย์ที่ปรึกษา" v-model="teacher" :items="teachers"></v-select>
+            <v-select label="เลือกอาจารย์ที่ปรึกษา" v-model="teacher" :items="teachers" @change="filterTeacher"></v-select>
             <v-spacer class="ml-3"></v-spacer>
-            <v-btn @click="filterTeacher" color="primary">ค้นหา</v-btn>
           </v-flex>
           <v-flex v-show="display">
+            <v-img :src="image" width="200" height="250"></v-img>
             <h6 class="title">ความเชี่ยวชาญ</h6>
             <v-list dense v-for="pro in professional" :key="pro">
               <v-list-item>
@@ -49,7 +49,8 @@ export default {
       profiles: [],
       header: [],
       professional: [],
-      display: false
+      display: false,
+      image: ''
     };
   },
   methods: {
@@ -58,6 +59,7 @@ export default {
         if (element.id === this.teacher) {
           this.header = element.header;
           this.professional = element.professional;
+          this.image = element.image
           return;
         }
       });
