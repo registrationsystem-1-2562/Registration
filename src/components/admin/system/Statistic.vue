@@ -21,15 +21,18 @@
       </vue-json-to-csv>
     </v-container>
     <v-data-table :headers="headers" :items="records" class="elevation-1" :items-per-page="5"></v-data-table>
+    <line-chart :data="render" :height="200" />
   </v-container>
 </template>
 
 <script>
 import VueJsonToCsv from 'vue-json-to-csv'
+import LineChart from './parts/line-chart'
 
 export default {
   components: {
-    VueJsonToCsv
+    VueJsonToCsv,
+    LineChart
   },
   data() {
     return {
@@ -84,8 +87,33 @@ export default {
           min: 2.99,
           mean: 3.42
         }
-      ]
+      ],
+      render: {
+        labels: ['ลงทะเบียน', 'max', 'min', 'mean'],
+        datasets: [
+          {
+            label: 'รศ.ดร กิตติศักดิ์ เกิดประสพ',
+            backgroundColor: '#707070',
+            data: [20, 4.0, 2.51, 2.78]
+          },
+          {
+            label: 'รศ.ดร นิตยา เกิดประสพ',
+            backgroundColor: '#F1F1F1',
+            data: [15, 3.97, 2.68, 3.04]
+          },
+          {
+            label: 'ผศ.ดร. พิชโยทัย มหัทธนาภิวัฒน์',
+            backgroundColor: '#f87979',
+            data: [30, 3.99, 2.44, 2.68]
+          },
+          {
+            label: 'ผศ.ดร ปรเมศวร์ ห่อแก้ว',
+            backgroundColor: '#505050',
+            data: [19, 3.67, 2.99, 3.42]
+          }
+        ]
+      }
     };
-  }
+  },
 };
 </script>
