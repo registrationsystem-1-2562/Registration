@@ -5,6 +5,7 @@
       <v-card-text>
         <v-layout column wrap align-start>
           <v-flex xs12 sm6 >
+            <v-img :src="profile.image"></v-img>
             <h6 class="title">ความเชี่ยวชาญ</h6>
             <v-list dense v-for="(pro, i) in profile.professional" :key="i">
               <v-list-item>
@@ -50,6 +51,8 @@ export default {
   methods: {},
   created() {
     this.$store.dispatch("settingTeacherProfile", this.profiles);
+    // eslint-disable-next-line
+    console.log(this.profiles)
     this.profiles.forEach(value => {
         if (value.id === this.user) {
             this.profile = value
