@@ -44,6 +44,15 @@ export default {
     getYear: function(year) {
       this.$store.commit("setSchoolYear", year);
     },
+    dataSchoolYear: function () {
+      // eslint-disable-next-line
+      let dataYear = {
+          student_register: this.studentRegister.length,
+          teacher_register: this.teacherCount.length
+      }
+      // wait...
+
+    },
     statisticRegister: function() {
       // get all teacher
       this.result.forEach(snapshot => {

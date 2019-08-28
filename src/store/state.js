@@ -1,6 +1,6 @@
 export const state = {
     user: null,
-    schoolYear: null,
+    schoolYear: new Date().getFullYear() + 543,
     loading: false,
     error: null,
     studyYear: null,
