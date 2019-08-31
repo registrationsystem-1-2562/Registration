@@ -26,8 +26,9 @@
 </template>
 
 <script>
-import VueJsonToCsv from 'vue-json-to-csv'
-import LineChart from './parts/line-chart'
+import VueJsonToCsv from "vue-json-to-csv";
+import LineChart from "./parts/line-chart";
+import firebase, { firestore } from "firebase";
 
 export default {
   components: {
@@ -36,6 +37,7 @@ export default {
   },
   data() {
     return {
+      teachers: [],
       headers: [
         {
           text: "อาจารย์ที่ปรึกษา",
@@ -89,31 +91,63 @@ export default {
         }
       ],
       render: {
-        labels: ['ลงทะเบียน', 'max', 'min', 'mean'],
+        labels: ["ลงทะเบียน", "max", "min", "mean"],
         datasets: [
           {
-            label: 'รศ.ดร กิตติศักดิ์ เกิดประสพ',
-            backgroundColor: '#707070',
+            label: "รศ.ดร กิตติศักดิ์ เกิดประสพ",
+            backgroundColor: "#707070",
             data: [20, 4.0, 2.51, 2.78]
           },
           {
-            label: 'รศ.ดร นิตยา เกิดประสพ',
-            backgroundColor: '#F1F1F1',
+            label: "รศ.ดร นิตยา เกิดประสพ",
+            backgroundColor: "#F1F1F1",
             data: [15, 3.97, 2.68, 3.04]
           },
           {
-            label: 'ผศ.ดร. พิชโยทัย มหัทธนาภิวัฒน์',
-            backgroundColor: '#f87979',
+            label: "ผศ.ดร. พิชโยทัย มหัทธนาภิวัฒน์",
+            backgroundColor: "#f87979",
             data: [30, 3.99, 2.44, 2.68]
           },
           {
-            label: 'ผศ.ดร ปรเมศวร์ ห่อแก้ว',
-            backgroundColor: '#505050',
+            label: "ผศ.ดร ปรเมศวร์ ห่อแก้ว",
+            backgroundColor: "#505050",
             data: [19, 3.67, 2.99, 3.42]
           }
         ]
       }
     };
   },
+  created() {
+    this.$store.dispatch("settingTeacher", this.teachers);
+
+    firebase
+      .database()
+      .ref("statistic/" + this.$store.getters.getSchoolYear)
+      .on("child_added", snapshot => {
+        this.teachers.forEach(element => {
+          if (element.value === snapshot.val().key) {
+            // record in table
+            this.records.push({
+              teacher: this.teachers.text,
+              register: snapshot.val().register,
+              max: snapshot.val().max,
+              min: snapshot.val().min,
+              mean: snapshot.val().mean
+            });
+            // record in graph
+            this.render.datasets.push({
+              label: this.teachers.text,
+              backgroundColor: "#000000",
+              data: [
+                snapshot.val().register,
+                snapshot.val().max,
+                snapshot.val().min,
+                snapshot.val().mean
+              ]
+            });
+          }
+        });
+      });
+  }
 };
 </script>

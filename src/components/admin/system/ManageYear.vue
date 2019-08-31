@@ -72,7 +72,7 @@ export default {
             if (maxGpax < snapshot.gpax) {
               maxGpax = snapshot.gpax;
             }
-            if (minGpax > snapshot.gpax) {
+            else if (minGpax > snapshot.gpax) {
               minGpax = snapshot.gpax;
             }
             mean += snapshot.gpax;
