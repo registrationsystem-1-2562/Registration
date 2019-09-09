@@ -135,13 +135,23 @@ export const actions = {
     },
 
     //notice
-    setNotice( {commit} , payload) {
+    createNotice( {commit} , payload) {
         commit('setLoading', true)
+        let date = new Date()
         firebase.database().ref('notice/' + payload.user + '/' + payload.title ).set({
           title: payload.title,
           information: payload.information,
           user: payload.user,
-          TIMESTAMP: firebase.database.ServerValue.TIMESTAMP
+          date:
+              date.getDate() +
+              "/" +
+              (date.getMonth() + 1) +
+              "/" +
+              date.getFullYear() +
+              " " +
+              date.getHours() +
+              ":" +
+              date.getMinutes()
         });
         commit('setLoading', false)
     }

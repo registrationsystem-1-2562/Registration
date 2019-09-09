@@ -33,39 +33,49 @@
     <v-content>
       <v-container>
        <v-container row>
-            <h4 class="display-1">ข่าวประกาศ</h4>
+            <h4 class="display-1">ประกาศข่าว</h4>
             <v-spacer></v-spacer>
+            <router-link link to='allNotice'>ดูประกาศข่าวทั้งหมด</router-link>
         </v-container>
-        <div>
-            <v-card class="mx-auto" max-width="80%">
+        <v-container dense v-for="(message, i) in notices" :key="i">
+            <v-card class="mx-auto" max-width="80%" > <!-- color="#ffe4c4" -->
                 <v-responsive>
-                    <v-card-title>เข้าพบอาจารย์ที่ปรึกษาโปรเจค</v-card-title>
+                    <v-card-title>{{message.title}}</v-card-title>
                     <v-card-text>
-                        &emsp;&emsp;ให้นักศึกษาเข้าพบอาจารย์ที่ปรึกษารายวิชา Computer Engineering Project ตามวันและเวลาที่กำหนด
+                        &emsp;&emsp;{{message.information}}
                     </v-card-text>
                     <v-layout justify-end wrap>
                         <v-flex xs12 sm4 text-center>
-                            <v-card-text>Professor/master name</v-card-text>
+                            <v-card-text v-text="message.date"></v-card-text>
                         </v-flex>
-                        <v-flex xs12 sm2 text-center>
+                        <!-- <v-flex xs12 sm2 text-center>
                             <v-card-text>01-01-0001</v-card-text>
-                        </v-flex>
+                        </v-flex> -->
                     </v-layout>       
                 </v-responsive>
             </v-card>
-        </div>
+        </v-container>
       </v-container>
     </v-content>
   </v-app>
 </template>
 
 <script>
+import firebase from 'firebase'
+
 export default {
   data() {
     return {
-      drawer: null
+      drawer:null,
+      notices:{}
     };
-  }
+  },
+  mounted () {
+    firebase.database().ref('notice').once('child_added', snapshot => {
+          this.notices = snapshot.val();
+            console.log(snapshot.val());
+        })
+  },
 };
 </script>
 

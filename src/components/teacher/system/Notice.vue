@@ -1,12 +1,12 @@
 <template>
     <v-container>    
-        <v-container> <!--dense v-for="(message, i) in noticeState" :key="i"-->
+        <v-container dense v-for="(message, i) in notices" :key="i"> <!---->
           <form>
-            <v-card class="mx-auto" max-width="70%" color="#ffe4c4"> 
+            <v-card class="mx-auto" max-width="70%"> <!--color="#ffe4c4" -->
                 <v-responsive>
-                    <v-card-title v-text="noticeState.title"></v-card-title>
-                    <v-card-text v-text="noticeState.information">
-                        &emsp;&emsp;
+                    <v-card-title>{{message.title}}</v-card-title>
+                    <v-card-text>
+                        &emsp;&emsp;{{message.information}}
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
@@ -59,35 +59,47 @@
 
 
 <script>
+import firebase from 'firebase'
 
 export default {
   data() {
     return {
         message:{
-            title: 'title Text',
-            information: 'information Text',
+            title: '',
+            information: '',
             user: this.$store.getters.getUser
-        }
+        },
+        notices:{}
     }
   },
-    computed: {
-      noticeState() {
-        return this.$store.getters.getNotice
-      }
-    },
     methods:{
       storeMessage:function(){
         //this.messages.push({title:this.title,information:this.information})
-        this.$store.dispatch('setNotice', this.message)
+        this.$store.dispatch('createNotice', this.message)
         this.title='';
-        this.information=''; 
-        //console.log(this.title,this.information); 
-      },
+        this.information='';
+        },
       clearMessage:function(){
           this.title='';
           this.information='';
       },
     },
+    created() {
+        this.$store.dispatch("showNotice", this.notices);
+        this.notices.forEach(value => {
+            if (value.id === this.message.user) {
+                this.notice = value;
+            }
+        });
+        console.log(this.notice.title);
+    },
+    mounted () {
+        firebase.database().ref('notice').once('child_added', snapshot => {
+            
+            this.notices = snapshot.val();  
+                console.log(this.notices);
+        })
+    }
   
 };
 </script>

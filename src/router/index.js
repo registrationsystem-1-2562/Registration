@@ -5,6 +5,7 @@ import Router from 'vue-router'
 import Home from '../components/Home'
 import LoginStudent from '../components/LoginStudent'
 import LoginTeacher from '../components/LoginTeacher'
+import AllNotice from '../components/AllNotice'
 
 // administrator component
 import Login from '../components/admin/Login'
@@ -51,6 +52,10 @@ export default new Router({
         {
             path: '/alogin',
             component: Login,
+        },
+        {
+            path: '/allNotice',
+            component: AllNotice,
         },
         {
             // admin route
