@@ -21,14 +21,35 @@
       </vue-json-to-csv>
     </v-container>
     <v-data-table :headers="headers" :items="records" class="elevation-1" :items-per-page="5"></v-data-table>
-    <line-chart :data="render" :height="200" />
+    <v-flex>
+      <v-row>
+        <v-col>
+          <h3 class="display-2 text-center">ลงทะเบียน</h3>
+          <line-chart :data="register" :height="200" />
+        </v-col>
+        <v-col>
+          <h3 class="display-2 text-center">MAX GPAX</h3>
+          <line-chart :data="max" :height="200" />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <h3 class="display-2 text-center">MIN GPAX</h3>
+          <line-chart :data="min" :height="200" />
+        </v-col>
+        <v-col>
+          <h3 class="display-2 text-center">MEAN GPAX</h3>
+          <line-chart :data="mean" :height="200" />
+        </v-col>
+      </v-row>
+    </v-flex>
   </v-container>
 </template>
 
 <script>
 import VueJsonToCsv from "vue-json-to-csv";
 import LineChart from "./parts/line-chart";
-import firebase, { firestore } from "firebase";
+import firebase from "firebase";
 
 export default {
   components: {
@@ -60,94 +81,75 @@ export default {
           value: "mean"
         }
       ],
-      records: [
-        {
-          teacher: "รศ.ดร กิตติศักดิ์ เกิดประสพ",
-          register: 20,
-          max: 4.0,
-          min: 2.51,
-          mean: 2.78
-        },
-        {
-          teacher: "รศ.ดร นิตยา เกิดประสพ",
-          register: 15,
-          max: 3.97,
-          min: 2.68,
-          mean: 3.04
-        },
-        {
-          teacher: "ผศ.ดร. พิชโยทัย มหัทธนาภิวัฒน์",
-          register: 30,
-          max: 3.99,
-          min: 2.44,
-          mean: 2.68
-        },
-        {
-          teacher: "ผศ.ดร ปรเมศวร์ ห่อแก้ว",
-          register: 19,
-          max: 3.67,
-          min: 2.99,
-          mean: 3.42
-        }
-      ],
-      render: {
-        labels: ["ลงทะเบียน", "max", "min", "mean"],
-        datasets: [
-          {
-            label: "รศ.ดร กิตติศักดิ์ เกิดประสพ",
-            backgroundColor: "#707070",
-            data: [20, 4.0, 2.51, 2.78]
-          },
-          {
-            label: "รศ.ดร นิตยา เกิดประสพ",
-            backgroundColor: "#F1F1F1",
-            data: [15, 3.97, 2.68, 3.04]
-          },
-          {
-            label: "ผศ.ดร. พิชโยทัย มหัทธนาภิวัฒน์",
-            backgroundColor: "#f87979",
-            data: [30, 3.99, 2.44, 2.68]
-          },
-          {
-            label: "ผศ.ดร ปรเมศวร์ ห่อแก้ว",
-            backgroundColor: "#505050",
-            data: [19, 3.67, 2.99, 3.42]
-          }
-        ]
+      records: [],
+      register: {
+        labels: ["ลงทะเบียน"],
+        datasets: []
+      },
+      max: {
+        labels: ["max"],
+        datasets: []
+      },
+      min: {
+        labels: ["min"],
+        datasets: []
+      },
+      mean: {
+        labels: ["mean"],
+        datasets: []
       }
     };
   },
   created() {
     this.$store.dispatch("settingTeacher", this.teachers);
+    // eslint-disable-next-line
+    console.log(this.teachers);
 
     firebase
       .database()
       .ref("statistic/" + this.$store.getters.getSchoolYear)
       .on("child_added", snapshot => {
         this.teachers.forEach(element => {
-          if (element.value === snapshot.val().key) {
+          if (element.value === snapshot.key) {
             // record in table
             this.records.push({
-              teacher: this.teachers.text,
+              teacher: element.text,
               register: snapshot.val().register,
               max: snapshot.val().max,
               min: snapshot.val().min,
               mean: snapshot.val().mean
             });
             // record in graph
-            this.render.datasets.push({
-              label: this.teachers.text,
-              backgroundColor: "#000000",
-              data: [
-                snapshot.val().register,
-                snapshot.val().max,
-                snapshot.val().min,
-                snapshot.val().mean
-              ]
+            this.register.datasets.push({
+              label: element.text,
+              backgroundColor:
+                "#" + Math.floor(Math.random() * 16777215).toString(16),
+              data: [snapshot.val().register]
+            });
+            this.max.datasets.push({
+              label: element.text,
+              backgroundColor:
+                "#" + Math.floor(Math.random() * 16777215).toString(16),
+              data: [snapshot.val().max]
+            });
+            this.min.datasets.push({
+              label: element.text,
+              backgroundColor:
+                "#" + Math.floor(Math.random() * 16777215).toString(16),
+              data: [snapshot.val().min]
+            });
+            this.mean.datasets.push({
+              label: element.text,
+              backgroundColor:
+                "#" + Math.floor(Math.random() * 16777215).toString(16),
+              data: [snapshot.val().mean]
             });
           }
         });
       });
+    /* eslint-disable */
+    console.log(this.records);
+    console.log(this.render);
   }
 };
 </script>
