@@ -1,18 +1,20 @@
 <template>
   <v-container align-center justify-center fill-height align-content-center>
     <v-layout row>
-      <v-card min-width="300">
+      <v-card min-width="310">
         <v-card-title>อัปโหลดข้อมูลนักศึกษา</v-card-title>
         <v-card-text>
           <v-layout column>
             <v-flex xs12 sm6 md4 d-flex>
-              <vue-xlsx-table @on-select-file="readXlsx" class="v-btn display-1">Import</vue-xlsx-table>
+              <vue-xlsx-table @on-select-file="readXlsx">
+                <v-btn color="#20a0ff" text class="white--text">Import</v-btn>
+              </vue-xlsx-table>
             </v-flex>
-            <v-flex>
-              <v-btn color="error" class="mt-3" @click="fileInput = []">Clear</v-btn>
+            <v-flex xs12 sm6 md4 d-flex>
+              <v-btn color="error" class="mt-3" @click="fileInput = []" width="100%">Clear</v-btn>
             </v-flex>
-            <v-flex>
-              <v-btn color="success" class="mt-3" @click="importData">นำเข้าข้อมูล</v-btn>
+            <v-flex xs12 sm6 md4 d-flex>
+              <v-btn color="success" class="mt-3" @click="importData" width="100%">นำเข้าข้อมูล</v-btn>
             </v-flex>
           </v-layout>
         </v-card-text>
@@ -70,6 +72,7 @@ export default {
           })
         })
 
+        // generate student user
         this.fileInput.forEach(data => {
           firebase.database().ref('student_login/' + data.รหัสนักศึกษา).set({
             username: data.รหัสนักศึกษา,
