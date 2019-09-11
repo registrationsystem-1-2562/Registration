@@ -17,11 +17,39 @@
         </v-flex>
         <v-spacer></v-spacer>
         <v-flex xs12 sm6 md4 d-flex>
-          <v-btn color="primary" class="mx-auto xs-auto" @click="resultRegister">จัดที่นักศึกษา</v-btn>
+          <v-btn color="primary" class="mx-auto" @click="resultRegister">จัดที่นักศึกษา</v-btn>
+          <v-btn color="primary" class="mx-auto" @click="statisticData">เก็บข้อมูลการจัดอันดับ</v-btn>
         </v-flex>
       </v-layout>
     </v-container>
-    <!-- data table -->
+    <v-simple-table>
+      <thead>
+        <tr>
+          <th>ปีการศึกษา</th>
+          <th>นักศึกษา</th>
+          <th>นักศึกษาลงทะเบียน</th>
+          <th>อาจารย์</th>
+          <th>อาจารย์ลงทะเบียน</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="reg in showRegister" :key="reg.id">
+          <td>{{ reg.id }}</td>
+          <td>{{ reg.student }}</td>
+          <td>{{ reg.student_register }}</td>
+          <td>{{ reg.teacher }}</td>
+          <td>{{ reg.teacher_register }}</td>
+        </tr>
+      </tbody>
+    </v-simple-table>
+    <v-snackbar v-model="warningResult">
+      จัดอันดับแล้ว
+      <v-btn @click="warningResult = false" text>ปิด</v-btn>
+    </v-snackbar>
+    <v-snackbar v-model="warningStat">
+      เก็บข้อมูลการจัดอันดับแล้ว
+      <v-btn @click="warningStat = false" text>ปิด</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -33,46 +61,43 @@ export default {
     return {
       years: [],
       result: [],
+      register: [],
+      showRegister: [],
       // teacher register
       teacherRegister: [],
       // lecturer register
       studentRegister: [],
-      teacherCount: []
+      teacherCount: [],
+      warningResult: false,
+      warningStat: false
     };
   },
   methods: {
     getYear: function(year) {
       this.$store.commit("setSchoolYear", year);
     },
-    dataSchoolYear: function () {
-      // eslint-disable-next-line
-      let dataYear = {
-          student_register: this.studentRegister.length,
-          teacher_register: this.teacherCount.length
-      }
-      // wait...
-
-    },
-    statisticRegister: function() {
-      // get all teacher
-      this.result.forEach(snapshot => {
-        this.teacherCount.push(snapshot.teacher);
-      });
+    statisticData: function() {
+      firebase
+        .database()
+        .ref("result_register/" + this.$store.getters.getSchoolYear)
+        .on("child_added", snapshot => {
+          this.register.push(snapshot.val());
+          this.teacherCount.push(snapshot.val().teacher);
+        });
       // unique teacher
       this.teacherCount = [...new Set(this.teacherCount)];
-      for (let i = 0; i < this.teacherCount; i++) {
+      for (var i = 0; i < this.teacherCount.length; i++) {
         let maxGpax = 0,
           minGpax = 4,
           count = 0,
           mean = 0,
-          teacher = "";
-        this.result.forEach(snapshot => {
+          teacher = null;
+        this.register.forEach(snapshot => {
           if (snapshot.teacher === this.teacherCount[i]) {
             teacher = snapshot.teacher;
             if (maxGpax < snapshot.gpax) {
               maxGpax = snapshot.gpax;
-            }
-            else if (minGpax > snapshot.gpax) {
+            } else if (minGpax > snapshot.gpax) {
               minGpax = snapshot.gpax;
             }
             mean += snapshot.gpax;
@@ -91,8 +116,35 @@ export default {
           });
 
         // *****************************************************************************
-        
       }
+      // data school year
+      let cTeacher = 0,
+        cStudent = 0;
+      firebase
+        .database()
+        .ref("teacher")
+        .on("child_added", () => {
+          cTeacher++;
+        });
+      firebase
+        .database()
+        .ref("student")
+        .on("child_added", () => {
+          cStudent++;
+        });
+      let dataYear = {
+        student_register: this.studentRegister.length,
+        teacher_register: this.teacherCount.length,
+        student: cStudent,
+        teacher: cTeacher
+      };
+
+      firebase
+        .database()
+        .ref("data_school_year/" + this.$store.getters.getSchoolYear)
+        .set(dataYear);
+        this.register = []
+      this.warningStat = true;
     },
     resultRegister: function() {
       /**
@@ -135,13 +187,8 @@ export default {
       firebase
         .database()
         .ref("result_register/" + this.$store.getters.getSchoolYear)
-        .set({
-          ...this.result
-        });
-
-      // finished and
-      //  store statistic
-      this.statisticRegister;
+        .set({ ...this.result });
+      this.warningResult = true;
     }
   },
   created() {
@@ -173,6 +220,17 @@ export default {
     this.studentRegister.sort((a, b) => {
       return b["gpax"] - a["gpax"] || a["date"] - b["date"];
     });
+
+    firebase
+        .database()
+        .ref("data_school_year")
+        .on('child_added', snapshot => {
+          this.showRegister.push({
+            id: snapshot.key,
+            ...snapshot.val()
+          })
+        })
+        console.log(this.showRegister)
   }
 };
 </script>
