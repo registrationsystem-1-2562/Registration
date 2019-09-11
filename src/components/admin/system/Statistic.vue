@@ -21,28 +21,18 @@
       </vue-json-to-csv>
     </v-container>
     <v-data-table :headers="headers" :items="records" class="elevation-1" :items-per-page="5"></v-data-table>
-    <v-flex>
-      <v-row>
-        <v-col>
-          <h3 class="display-2 text-center">ลงทะเบียน</h3>
-          <line-chart :data="register" :height="200" />
-        </v-col>
-        <v-col>
-          <h3 class="display-2 text-center">MAX GPAX</h3>
-          <line-chart :data="max" :height="200" />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <h3 class="display-2 text-center">MIN GPAX</h3>
-          <line-chart :data="min" :height="200" />
-        </v-col>
-        <v-col>
-          <h3 class="display-2 text-center">MEAN GPAX</h3>
-          <line-chart :data="mean" :height="200" />
-        </v-col>
-      </v-row>
-    </v-flex>
+    <v-divider></v-divider>
+    <h3 class="display-2 text-center">ลงทะเบียน</h3>
+    <line-chart :data="register" :height="200" />
+    <v-divider></v-divider>
+    <h3 class="display-2 text-center">MAX GPAX</h3>
+    <line-chart :data="max" :height="200" />
+    <v-divider></v-divider>
+    <h3 class="display-2 text-center">MIN GPAX</h3>
+    <line-chart :data="min" :height="200" />
+    <v-divider></v-divider>
+    <h3 class="display-2 text-center">MEAN GPAX</h3>
+    <line-chart :data="mean" :height="200" />
   </v-container>
 </template>
 
@@ -111,6 +101,7 @@ export default {
       .on("child_added", snapshot => {
         this.teachers.forEach(element => {
           if (element.value === snapshot.key) {
+            let colorGraph = "#" + Math.floor(Math.random() * 16777215).toString(16)
             // record in table
             this.records.push({
               teacher: element.text,
@@ -122,26 +113,22 @@ export default {
             // record in graph
             this.register.datasets.push({
               label: element.text,
-              backgroundColor:
-                "#" + Math.floor(Math.random() * 16777215).toString(16),
+              backgroundColor: colorGraph,
               data: [snapshot.val().register]
             });
             this.max.datasets.push({
               label: element.text,
-              backgroundColor:
-                "#" + Math.floor(Math.random() * 16777215).toString(16),
+              backgroundColor: colorGraph,
               data: [snapshot.val().max]
             });
             this.min.datasets.push({
               label: element.text,
-              backgroundColor:
-                "#" + Math.floor(Math.random() * 16777215).toString(16),
+              backgroundColor: colorGraph,
               data: [snapshot.val().min]
             });
             this.mean.datasets.push({
               label: element.text,
-              backgroundColor:
-                "#" + Math.floor(Math.random() * 16777215).toString(16),
+              backgroundColor: colorGraph,
               data: [snapshot.val().mean]
             });
           }
