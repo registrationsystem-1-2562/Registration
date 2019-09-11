@@ -230,6 +230,7 @@ export default {
             ...snapshot.val()
           })
         })
+        // eslint-disable-next-line
         console.log(this.showRegister)
   }
 };
