@@ -138,7 +138,7 @@ export const actions = {
     createNotice( {commit} , payload) {
         commit('setLoading', true)
         let date = new Date()
-        firebase.database().ref('notice/' + payload.user + '/' + payload.title ).set({
+        firebase.database().ref('test_notice/' ).push({
           title: payload.title,
           information: payload.information,
           user: payload.user,
@@ -151,7 +151,22 @@ export const actions = {
               " " +
               date.getHours() +
               ":" +
-              date.getMinutes()
+              date.getMinutes() +
+              ":" +
+              date.getSeconds()
+        });
+        commit('setLoading', false)
+    },
+    showNotice({ commit }, payload) {
+        commit('setLoading', true)
+        firebase
+          .database()
+          .ref("test_notice")
+          .on("child_added", snapshot => {
+            payload.unshift({
+                id: snapshot.key,
+                ...snapshot.val()
+            });
         });
         commit('setLoading', false)
     }

@@ -37,9 +37,9 @@
             <v-spacer></v-spacer>
             <router-link link to='allNotice'>ดูประกาศข่าวทั้งหมด</router-link>
         </v-container>
-        <v-container dense v-for="(message, i) in notices" :key="i">
+        <v-container dense v-for="(message, i) in notices.slice(0,3)" :key="i">
             <v-card class="mx-auto" max-width="80%" > <!-- color="#ffe4c4" -->
-                <v-responsive>
+             <v-alert border="top" colored-border color="info accent-4" elevation="2">
                     <v-card-title>{{message.title}}</v-card-title>
                     <v-card-text>
                         &emsp;&emsp;{{message.information}}
@@ -52,8 +52,9 @@
                             <v-card-text>01-01-0001</v-card-text>
                         </v-flex> -->
                     </v-layout>       
-                </v-responsive>
+              </v-alert>
             </v-card>
+          
         </v-container>
       </v-container>
     </v-content>
@@ -61,20 +62,19 @@
 </template>
 
 <script>
-import firebase from 'firebase'
-
 export default {
   data() {
     return {
       drawer:null,
-      notices:{}
+      notices:[]
+      
     };
   },
-  mounted () {
-    firebase.database().ref('notice').once('child_added', snapshot => {
-          this.notices = snapshot.val();
-            console.log(snapshot.val());
-        })
+  created() {
+    this.$store.dispatch("showNotice", this.notices);
+    
+    // eslint-disable-next-line
+    console.log(this.notices);
   },
 };
 </script>

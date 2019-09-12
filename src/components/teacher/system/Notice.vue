@@ -44,6 +44,13 @@
                   ></v-textarea>
                 </v-form>
               </v-card-text>
+              <v-file-input
+                :rules="rules"
+                accept="image/png, image/jpeg, image/bmp"
+                placeholder="เลือกรูปภาพ"
+                prepend-icon="mdi-camera"
+                label="อัพโหลด"
+              ></v-file-input>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn @click="clearMessage" color="#abb2b9">Clear</v-btn>
@@ -59,8 +66,6 @@
 
 
 <script>
-import firebase from "firebase";
-
 export default {
   data() {
     return {
@@ -69,19 +74,24 @@ export default {
         information: "",
         user: this.$store.getters.getUser
       },
-      notices: {}
+      notices: [],
+      notice:{},
+      rules: [
+        value => !value || value.size < 2000000 || 'picture size should be less than 2 MB!',
+      ],
+      
     };
   },
   methods: {
     storeMessage: function() {
       //this.messages.push({title:this.title,information:this.information})
       this.$store.dispatch("createNotice", this.message);
-      this.title = "";
-      this.information = "";
+      this.message.title = "";
+      this.message.information = "";
     },
     clearMessage: function() {
-      this.title = "";
-      this.information = "";
+      this.message.title = "";
+      this.message.information = "";
     }
   },
   created() {
@@ -93,16 +103,6 @@ export default {
     });
     // eslint-disable-next-line
     console.log(this.notice.title);
-  },
-  mounted() {
-    firebase
-      .database()
-      .ref("notice")
-      .once("child_added", snapshot => {
-        this.notices = snapshot.val();
-        // eslint-disable-next-line
-        console.log(this.notices);
-      });
   }
 };
 </script>
