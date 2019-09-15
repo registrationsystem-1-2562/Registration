@@ -138,11 +138,11 @@ export const actions = {
     createNotice( {commit} , payload) {
         commit('setLoading', true)
         let date = new Date()
-        firebase.database().ref('test_notice/' ).push({
-          title: payload.title,
-          information: payload.information,
-          user: payload.user,
-          date:
+        const message = {
+            title: payload.title,
+            information: payload.information,
+            user: payload.user,
+            date:
               date.getDate() +
               "/" +
               (date.getMonth() + 1) +
@@ -151,10 +151,42 @@ export const actions = {
               " " +
               date.getHours() +
               ":" +
-              date.getMinutes() +
+              date.getMinutes()+
               ":" +
               date.getSeconds()
-        });
+        }
+        let imageUrl
+        let key
+        firebase.database().ref('test_notice/').push(message)
+            .then((data) =>{
+                key = data.key
+                return key
+            })
+            .then(key => {
+                const filename = payload.image.name
+                const ext = filename.slice(filename.lastIndexOf('.'))
+                return firebase.storage().ref('noticeImage/' + key + ext).put(payload.image)
+            })
+            // get URL methods failed.
+            .then(() => {
+                firebase.storage.uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    // eslint-disable-next-line
+                    console.log('File available at', downloadURL);
+                  });
+                
+                return firebase.database().ref('test_notice').child(key).update({imageUrl: imageUrl})
+            })
+            .then(() => {
+                commit('createNotice', {
+                    ...message,
+                    imageUrl: imageUrl,
+                    id: key
+                })
+            })
+            .catch((error) => {
+                // eslint-disable-next-line
+                console.log(error)
+              })
         commit('setLoading', false)
     },
     showNotice({ commit }, payload) {

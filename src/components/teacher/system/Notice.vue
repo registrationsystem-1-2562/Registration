@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-container dense v-for="(message, i) in notices" :key="i">
+    <v-container dense v-for="(message, index) in notices" :key="index">
       <!---->
       <form>
         <v-card class="mx-auto" max-width="70%">
@@ -10,7 +10,7 @@
             <v-card-text>&emsp;&emsp;{{message.information}}</v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn depressed color="primary">Edit</v-btn>
+              <!--<v-btn depressed color="primary">Edit</v-btn>-->
               <v-btn depressed color="error">Delete</v-btn>
             </v-card-actions>
           </v-responsive>
@@ -32,7 +32,7 @@
                     label="เรื่องประกาศ"
                     name="title"
                     type="text"
-                    v-model="message.title"
+                    v-model="title"
                   ></v-text-field>
 
                   <v-textarea
@@ -40,17 +40,28 @@
                     name="information"
                     label="รายละเอียด"
                     type="text"
-                    v-model="message.information"
+                    v-model="information"
                   ></v-textarea>
                 </v-form>
-              </v-card-text>
-              <v-file-input
-                :rules="rules"
-                accept="image/png, image/jpeg, image/bmp"
-                placeholder="เลือกรูปภาพ"
-                prepend-icon="mdi-camera"
-                label="อัพโหลด"
-              ></v-file-input>
+                    <v-layout row>
+                     <v-flex xs12 xm6 offset-sm1>
+                      <v-btn raised class="primary" @click="onPickFile">Add Picture</v-btn>
+                      <input 
+                        type="file" 
+                        style="display: none" 
+                        ref="fileInput" 
+                        accept="image/*"
+                        @change="onFilePicked"
+                      >
+                     </v-flex>
+                    </v-layout>
+                    <v-layout row>
+                     <v-flex xs12 xm6 offset-sm1>
+                      <img :src="imageUrl" height="200">
+                     </v-flex>
+                    </v-layout>
+               </v-card-text>
+
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn @click="clearMessage" color="#abb2b9">Clear</v-btn>
@@ -66,43 +77,74 @@
 
 
 <script>
+import firebase from 'firebase'
+
 export default {
   data() {
     return {
-      message: {
-        title: "",
-        information: "",
-        user: this.$store.getters.getUser
-      },
+      
+      title: "",
+      information: "",
+      user: this.$store.getters.getUser,
       notices: [],
       notice:{},
-      rules: [
-        value => !value || value.size < 2000000 || 'picture size should be less than 2 MB!',
-      ],
-      
+      imageUrl: null,
+      image: null
     };
   },
   methods: {
     storeMessage: function() {
-      //this.messages.push({title:this.title,information:this.information})
-      this.$store.dispatch("createNotice", this.message);
-      this.message.title = "";
-      this.message.information = "";
+      if(!this.image){
+          return
+      }
+      const messageData ={
+          title: this.title,
+          information: this.information,
+          user: this.user,
+          image: this.image
+      }
+      this.$store.dispatch("createNotice", messageData)
+      this.title = ""
+      this.information = ""
+      this.imageUrl = ""
     },
     clearMessage: function() {
-      this.message.title = "";
-      this.message.information = "";
+      this.title = ""
+      this.information = ""
+      this.imageUrl = ""
+    },
+    onPickFile(){
+        this.$refs.fileInput.click()
+    },
+    onFilePicked(event){
+        const files = event.target.files
+        let filesname = files[0].name
+        if (filesname.lastIndexOf('.') <= 0){
+            return alert("please add a valid file!")
+        }
+        const reader = new FileReader();
+         reader.addEventListener('load', () => {
+             this.imageUrl = reader.result
+         })
+         reader.readAsDataURL(files[0])
+         this.image = files[0]
     }
   },
   created() {
     this.$store.dispatch("showNotice", this.notices);
     this.notices.forEach(value => {
-      if (value.id === this.message.user) {
-        this.notice = value;
+      if (this.user === value.user) {
+        this.notice = value
+        // eslint-disable-next-line
+        console.log("value user" + ' ' + value.user)
+        console.log("This user" + ' ' + this.user)
+        console.log("notice title" + ' ' + this.notice.title)
+        console.log("notice information" + ' ' + this.notice.information)
+        console.log("notice date" + ' ' + this.notice.date)
+        console.log("notice user" + ' ' + this.notice.user)
+        console.log("++++++++++++++++++++++++++++++++")
       }
-    });
-    // eslint-disable-next-line
-    console.log(this.notice.title);
+    });    
   }
 };
 </script>

@@ -4,4 +4,5 @@ export const state = {
     loading: false,
     error: null,
     studyYear: null,
+    noticeState: null
 }
