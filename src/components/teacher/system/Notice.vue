@@ -93,17 +93,32 @@ export default {
     };
   },
   methods: {
-    storeMessage: function() {
-      if(!this.image){
-          return
+    selectPost: function(){
+      if(this.image === null){
+        storeMessage()
       }
+      else{
+        storeMessageAndImage()
+      }
+    },
+    storeMessage: function() {
+      const messageData ={
+          title: this.title,
+          information: this.information,
+          user: this.user
+      }
+      this.$store.dispatch("createNotice", messageData)
+      this.title = ""
+      this.information = ""
+    },
+    storeMessageAndImage: function() {
       const messageData ={
           title: this.title,
           information: this.information,
           user: this.user,
           image: this.image
       }
-      this.$store.dispatch("createNotice", messageData)
+      this.$store.dispatch("createNoticeWithImage", messageData)
       this.title = ""
       this.information = ""
       this.imageUrl = ""

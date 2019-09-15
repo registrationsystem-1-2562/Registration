@@ -136,6 +136,27 @@ export const actions = {
 
     //notice
     createNotice( {commit} , payload) {
+        commit('setLoading', true);
+        let date = new Date()
+        firebase.database().ref('test_notice/').push({
+          title: payload.title,
+          information: payload.information,
+          user: payload.user,
+          imageUrl: '',
+          date:
+              date.getDate() +
+              "/" +
+              (date.getMonth() + 1) +
+              "/" +
+              date.getFullYear() +
+              " " +
+              date.getHours() +
+              ":" +
+              date.getMinutes()
+        });
+        commit('setLoading', false)
+    },
+    createNoticeWithImage( {commit} , payload) {
         commit('setLoading', true)
         let date = new Date()
         const message = {
@@ -157,6 +178,7 @@ export const actions = {
         }
         let imageUrl
         let key
+        let task
         firebase.database().ref('test_notice/').push(message)
             .then((data) =>{
                 key = data.key
@@ -165,16 +187,19 @@ export const actions = {
             .then(key => {
                 const filename = payload.image.name
                 const ext = filename.slice(filename.lastIndexOf('.'))
-                return firebase.storage().ref('noticeImage/' + key + ext).put(payload.image)
+                 task = firebase.storage().ref('noticeImage/' + key + ext).put(payload.image)
+                return task
             })
-            // get URL methods failed.
+            // get URL method.
             .then(() => {
-                firebase.storage.uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                task.snapshot.ref.getDownloadURL().then((url) => {
+                    this.imageUrl = url
                     // eslint-disable-next-line
-                    console.log('File available at', downloadURL);
-                  });
-                
-                return firebase.database().ref('test_notice').child(key).update({imageUrl: imageUrl})
+                    console.log(this.imageUrl)
+                    return firebase.database().ref('test_notice').child(key).update({
+                        imageUrl: this.imageUrl
+                    })
+                })
             })
             .then(() => {
                 commit('createNotice', {
@@ -202,7 +227,4 @@ export const actions = {
         });
         commit('setLoading', false)
     }
-      
-    
-
 }
