@@ -14,15 +14,15 @@
     </v-container>
     <v-container dense v-for="(message, i) in notices" :key="i">
       <v-card class="mx-auto" max-width="80%" > <!-- color="#ffe4c4" -->
-        <v-responsive>
-          <v-card-title>{{message.title}}</v-card-title>
-          <v-card-text>&emsp;&emsp;{{message.information}}</v-card-text>
-            <v-layout justify-end wrap>
-              <v-flex xs12 sm4 text-center>
-                <v-card-text v-text="message.date"></v-card-text>
-              </v-flex>
-            </v-layout>       
-        </v-responsive>
+      <v-alert border="top" colored-border color="info accent-4" elevation="2">
+        <v-card-title>{{message.title}}</v-card-title>
+         <v-card-text>&emsp;&emsp;{{message.information}}</v-card-text>
+          <v-layout justify-end wrap>
+            <v-flex xs12 sm4 text-center>
+              <v-card-text v-text="message.date"></v-card-text>
+            </v-flex>
+          </v-layout>       
+      </v-alert>
       </v-card>
     </v-container>
   </v-content>
@@ -34,20 +34,19 @@
 </template>>
 
 <script>
-import firebase from 'firebase'
+
 
 export default {
   data() {
     return {
       drawer:null,
-      notices:{}
+      notices:[]
     };
   },
-  mounted () {
-    firebase.database().ref('notice').once('child_added', snapshot => {
-          this.notices = snapshot.val();  
-            console.log(this.notices);
-        })
+  created() {
+    this.$store.dispatch("showNotice", this.notices);
+    // eslint-disable-next-line
+    console.log(this.notice);
   },
 };
 </script>
