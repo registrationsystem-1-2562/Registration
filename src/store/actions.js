@@ -152,7 +152,9 @@ export const actions = {
               " " +
               date.getHours() +
               ":" +
-              date.getMinutes()
+              date.getMinutes() +
+              ":" +
+              date.getSeconds()
         });
         commit('setLoading', false)
     },
@@ -172,7 +174,7 @@ export const actions = {
               " " +
               date.getHours() +
               ":" +
-              date.getMinutes()+
+              date.getMinutes() +
               ":" +
               date.getSeconds()
         }
@@ -195,7 +197,7 @@ export const actions = {
                 task.snapshot.ref.getDownloadURL().then((url) => {
                     this.imageUrl = url
                     // eslint-disable-next-line
-                    console.log(this.imageUrl)
+                    //console.log(this.imageUrl)
                     return firebase.database().ref('test_notice').child(key).update({
                         imageUrl: this.imageUrl
                     })
