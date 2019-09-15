@@ -1,22 +1,5 @@
 <template>
   <v-container>
-    <v-container dense v-for="(message, index) in notices" :key="index">
-      <!---->
-      <form>
-        <v-card class="mx-auto" max-width="70%">
-          <!--color="#ffe4c4" -->
-          <v-responsive>
-            <v-card-title>{{message.title}}</v-card-title>
-            <v-card-text>&emsp;&emsp;{{message.information}}</v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <!--<v-btn depressed color="primary">Edit</v-btn>-->
-              <v-btn depressed color="error">Delete</v-btn>
-            </v-card-actions>
-          </v-responsive>
-        </v-card>
-      </form>
-    </v-container>
     <v-container>
       <form>
         <v-responsive>
@@ -43,9 +26,9 @@
                     v-model="information"
                   ></v-textarea>
                 </v-form>
-                    <v-layout row>
-                     <v-flex xs12 xm6 offset-sm1>
-                      <v-btn raised class="primary" @click="onPickFile">Add Picture</v-btn>
+                    <v-layout>
+                     <v-flex xs3 xm1 offset-sm1>
+                      <v-btn raised class="green" @click="onPickFile">Add Picture</v-btn>
                       <input 
                         type="file" 
                         style="display: none" 
@@ -54,9 +37,13 @@
                         @change="onFilePicked"
                       >
                      </v-flex>
+
+                     <v-flex xs6 xm6 offset-sm1 v-if="image != null">
+                      <v-btn raised class="red" @click="removeFile">remove</v-btn>
+                     </v-flex>
                     </v-layout>
-                    <v-layout row>
-                     <v-flex xs12 xm6 offset-sm1>
+                    <v-layout v-if="image != null">
+                     <v-flex xs12 xm4 offset-sm2>
                       <img :src="imageUrl" height="200">
                      </v-flex>
                     </v-layout>
@@ -71,6 +58,31 @@
           </v-flex>
         </v-responsive>
       </form>
+    </v-container>
+    
+    <v-container dense v-for="(message, index) in notices" :key="index">
+      <!---->
+      <div>
+        <v-card class="mx-auto" max-width="70%">
+          <!--color="#ffe4c4" -->
+          <v-alert border="top" colored-border color="info accent-4" elevation="2">
+          <v-responsive>
+            <v-card-title>{{message.title}}</v-card-title>
+             <v-card-text>&emsp;&emsp;{{message.information}}</v-card-text>
+              <v-layout v-if="message.imageUrl != ''">
+                <v-flex xs12 xm4 offset-sm1>
+                  <img :src="message.imageUrl" height="400" width="600">
+                </v-flex>
+              </v-layout>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <!--<v-btn depressed color="primary">Edit</v-btn>-->
+              <v-btn depressed color="error">Delete</v-btn>
+            </v-card-actions>
+          </v-responsive>
+          </v-alert>
+        </v-card>
+      </div>
     </v-container>
   </v-container>
 </template>
@@ -121,12 +133,15 @@ export default {
       this.$store.dispatch("createNoticeWithImage", messageData)
       this.title = ""
       this.information = ""
-      this.imageUrl = ""
+      this.image = null
     },
     clearMessage: function() {
       this.title = ""
       this.information = ""
-      this.imageUrl = ""
+      this.image = null
+    },
+    removeFile: function(){
+      this.image = null
     },
     onPickFile(){
         this.$refs.fileInput.click()
@@ -148,16 +163,19 @@ export default {
   created() {
     this.$store.dispatch("showNotice", this.notices);
     this.notices.forEach(value => {
-      if (this.user === value.user) {
+      if (value.user === this.user) {
         this.notice = value
+        //console.log(value.id)
+        //console.log(this.notice.id)
         // eslint-disable-next-line
-        console.log("value user" + ' ' + value.user)
-        console.log("This user" + ' ' + this.user)
-        console.log("notice title" + ' ' + this.notice.title)
-        console.log("notice information" + ' ' + this.notice.information)
-        console.log("notice date" + ' ' + this.notice.date)
-        console.log("notice user" + ' ' + this.notice.user)
-        console.log("++++++++++++++++++++++++++++++++")
+        // console.log("value user" + ' ' + value.user)
+        // console.log("This user" + ' ' + this.user)
+        // console.log("notice title" + ' ' + this.notice.title)
+        // console.log("notice information" + ' ' + this.notice.information)
+        // console.log("notice date" + ' ' + this.notice.date)
+        // console.log("notice user" + ' ' + this.notice.user)
+        // console.log("notice image url" + ' ' + this.notice.imageUrl)
+        // console.log("++++++++++++++++++++++++++++++++")
       }
     });    
   }
