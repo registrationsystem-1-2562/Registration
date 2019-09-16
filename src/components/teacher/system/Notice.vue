@@ -52,7 +52,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn @click="clearMessage" color="#abb2b9">Clear</v-btn>
-                <v-btn @click="storeMessage" color="primary">Post</v-btn>
+                <v-btn @click="selectPost" color="primary">Post</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -107,10 +107,10 @@ export default {
   methods: {
     selectPost: function(){
       if(this.image === null){
-        storeMessage()
+        this.storeMessage()
       }
       else{
-        storeMessageAndImage()
+        this.storeMessageAndImage()
       }
     },
     storeMessage: function() {
