@@ -26,33 +26,30 @@
                     v-model="information"
                   ></v-textarea>
                 </v-form>
-                    <v-layout>
-                     <v-flex xs3 xm1 offset-sm1>
-                      <v-btn raised class="green" @click="onPickFile">Add Picture</v-btn>
-                      <input 
-                        type="file" 
-                        style="display: none" 
-                        ref="fileInput" 
-                        accept="image/*"
-                        @change="onFilePicked"
-                      >
-                     </v-flex>
-
-                     <v-flex xs6 xm6 offset-sm1 v-if="image != null">
-                      <v-btn raised class="red" @click="removeFile">remove</v-btn>
-                     </v-flex>
-                    </v-layout>
-                    <v-layout v-if="image != null">
-                     <v-flex xs12 xm4 offset-sm2>
-                      <img :src="imageUrl" height="200">
-                     </v-flex>
-                    </v-layout>
-               </v-card-text>
-
+              <v-layout>
+                <v-flex xs3 xm1 offset-sm1>
+                  <v-btn raised class="green" @click="onPickFile">Add Picture</v-btn>
+                    <input 
+                      type="file" 
+                      style="display: none" 
+                      ref="fileInput" 
+                      accept="image/*"
+                      @change="onFilePicked"
+                    ></v-flex>
+                  <v-flex xs6 xm6 offset-sm1 v-if="image != null">
+                    <v-btn raised class="red" @click="removeFile">remove</v-btn>
+                  </v-flex>
+              </v-layout>
+              </v-card-text>
+                <v-layout v-if="image != null">
+                  <v-flex xs12 xm4 offset-sm2>
+                    <img :src="imageUrl" height="200">
+                  </v-flex>
+                </v-layout>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn @click="clearMessage" color="#abb2b9">Clear</v-btn>
-                <v-btn @click="selectPost" color="primary">Post</v-btn>
+                 <v-btn @click="clearMessage" color="#abb2b9">Clear</v-btn>
+                 <v-btn @click="selectPost" color="primary">Post</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -157,7 +154,13 @@ export default {
              this.imageUrl = reader.result
          })
          reader.readAsDataURL(files[0])
-         this.image = files[0]
+          if (files[0].size > 1024 * 1024) {
+            alert('File too big (> 1 mb)');
+            this.image = null
+          }
+          else{
+          this.image = files[0]
+          }
     }
   },
   created() {
