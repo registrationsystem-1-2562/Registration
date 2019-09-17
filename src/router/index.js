@@ -14,6 +14,7 @@ import Upload from '../components/admin/system/Upload'
 import SchoolYear from '../components/admin/system/SchoolYear'
 import Statistic from '../components/admin/system/Statistic'
 import ManageYear from '../components/admin/system/ManageYear'
+import Manual from '../components/admin/system/Manual'
 
 // teacher component
 import TeacherDashBoard from '../components/teacher/Dashboard'
@@ -81,6 +82,10 @@ export default new Router({
                 {
                     path: 'manage',
                     component: ManageYear
+                },
+                {
+                    path: 'manual',
+                    component: Manual
                 }
             ]
         },

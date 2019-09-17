@@ -14,6 +14,14 @@
             <v-list-item-title>ข้อมูลปีการศึกษา</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item link replace to="manual">
+          <v-list-item-action>
+            <v-icon>mdi-account-edit</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>จัดอันดับนักศึกษา</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
       <v-container>
         <h6 class="title">จัดการ</h6>

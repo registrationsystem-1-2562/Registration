@@ -9,7 +9,7 @@
               <v-btn color="primary" outlined dark v-on="on" class="elevation-1">เลือกปีการศึกษา</v-btn>
             </template>
             <v-list>
-              <v-list-item v-for="year in years" :key="year.id" @click="getYear(year.year)">
+              <v-list-item v-for="year in years" :key="year.id" @click="getYear(year.year)" @change="getStudentRegister">
                 <v-list-item-title>{{ year.year }}</v-list-item-title>
               </v-list-item>
             </v-list>
@@ -76,6 +76,20 @@ export default {
     getYear: function(year) {
       this.$store.commit("setSchoolYear", year);
     },
+    getStudentRegister: function () {
+      this.studentRegister = []
+      firebase.database()
+      .ref("lecturer_register/" + this.$store.getters.getSchoolYear)
+      .on("child_added", snapshot => {
+        this.studentRegister.push({
+          id: snapshot.key,
+          ...snapshot.val()
+        });
+      });
+
+      // eslint-disable-next-line
+      console.log(this.studentRegister)
+    },
     statisticData: function() {
       firebase
         .database()
@@ -117,6 +131,16 @@ export default {
 
         // *****************************************************************************
       }
+      let regStudent = []
+      firebase
+        .database()
+        .ref("lecturer_register" + this.$store.getters.getSchoolYear)
+        .on("child_added", snapshot => {
+          regStudent.push({
+            id: snapshot.key,
+            ...snapshot.val()
+          })
+        });
       // data school year
       let cTeacher = 0,
         cStudent = 0;
@@ -133,7 +157,7 @@ export default {
           cStudent++;
         });
       let dataYear = {
-        student_register: this.studentRegister.length,
+        student_register: regStudent.length,
         teacher_register: this.teacherCount.length,
         student: cStudent,
         teacher: cTeacher
@@ -143,27 +167,35 @@ export default {
         .database()
         .ref("data_school_year/" + this.$store.getters.getSchoolYear)
         .set(dataYear);
-        this.register = []
+      this.register = [];
       this.warningStat = true;
     },
     resultRegister: function() {
       /**
        * Very Difficult
        */
+      
       this.studentRegister.forEach(student => {
         let remainer = true;
         for (let i = 0; i < student.teacher.length; i++) {
           let teacher = this.teacherRegister.find(
-            teacher => teacher.id === student.teacher[i]
+            teach => teach.id === student.teacher[i]
           );
-          if (teacher.remain !== 0) {
+          if (teacher === undefined) {
+            // eslint-disable-next-line
+            console.log('continue')
+            continue
+          }
+          // eslint-disable-next-line
+          console.log(teacher)
+          if (Number(teacher.remain) !== 0) {
             this.result.push({
               student: student.id,
               teacher: teacher.id,
               gpax: student.gpax
             });
             // set remain decrease by 1
-            teacher.remain--;
+            Number(teacher.remain--);
             break;
           } else if (i === student.teacher.length - 1) {
             remainer = false;
@@ -221,17 +253,17 @@ export default {
       return b["gpax"] - a["gpax"] || a["date"] - b["date"];
     });
 
+    // eslint-disable-next-line
+    console.log(this.studentRegister)
     firebase
-        .database()
-        .ref("data_school_year")
-        .on('child_added', snapshot => {
-          this.showRegister.push({
-            id: snapshot.key,
-            ...snapshot.val()
-          })
-        })
-        // eslint-disable-next-line
-        console.log(this.showRegister)
+      .database()
+      .ref("data_school_year")
+      .on("child_added", snapshot => {
+        this.showRegister.push({
+          id: snapshot.key,
+          ...snapshot.val()
+        });
+      });
   }
 };
 </script>

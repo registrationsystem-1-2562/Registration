@@ -23,16 +23,16 @@
     <v-data-table :headers="headers" :items="records" class="elevation-1" :items-per-page="5"></v-data-table>
     <v-divider></v-divider>
     <h3 class="display-2 text-center">ลงทะเบียน</h3>
-    <line-chart :data="register" :height="200" />
+    <line-chart :data="register" :height="200" :options="options"/>
     <v-divider></v-divider>
     <h3 class="display-2 text-center">MAX GPAX</h3>
-    <line-chart :data="max" :height="200" />
+    <line-chart :data="max" :height="200" :options="options"/>
     <v-divider></v-divider>
     <h3 class="display-2 text-center">MIN GPAX</h3>
-    <line-chart :data="min" :height="200" />
+    <line-chart :data="min" :height="200" :options="options"/>
     <v-divider></v-divider>
     <h3 class="display-2 text-center">MEAN GPAX</h3>
-    <line-chart :data="mean" :height="200" />
+    <line-chart :data="mean" :height="200" :options="options"/>
   </v-container>
 </template>
 
@@ -87,6 +87,17 @@ export default {
       mean: {
         labels: ["mean"],
         datasets: []
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        animation: {
+          duration: 0
+        },
+        hover: {
+          animationDuration: 0
+        },
+        responsiveAnimationDuration: 0
       }
     };
   },

@@ -7,7 +7,7 @@
           <v-layout column>
             <v-flex xs12 sm6 md4 d-flex>
               <vue-xlsx-table @on-select-file="readXlsx">
-                <v-btn color="#20a0ff" text class="white--text">Import</v-btn>
+                <v-btn color="#20a0ff" text class="white--text" width="100%">Import</v-btn>
               </vue-xlsx-table>
             </v-flex>
             <v-flex xs12 sm6 md4 d-flex>
