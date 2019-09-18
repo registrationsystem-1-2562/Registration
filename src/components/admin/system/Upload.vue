@@ -6,9 +6,14 @@
         <v-card-text>
           <v-layout column>
             <v-flex xs12 sm6 md4 d-flex>
-              <vue-xlsx-table @on-select-file="readXlsx">
-                <v-btn color="#20a0ff" text class="white--text" width="100%">Import</v-btn>
-              </vue-xlsx-table>
+              <v-btn color="primary" width="100%" @click="handleUploadClick">Import</v-btn>
+              <input
+                type="file"
+                ref="uploadFile"
+                :accept="accept"
+                v-show="false"
+                @change="handleUploadChange"
+              />
             </v-flex>
             <v-flex xs12 sm6 md4 d-flex>
               <v-btn color="error" class="mt-3" @click="fileInput = []" width="100%">Clear</v-btn>
@@ -51,41 +56,167 @@
 
 <script>
 // import VCsvImport from "vue-csv-import";
-import firebase from 'firebase'
+import firebase from "firebase";
+import XLSX from 'xlsx'
 
 export default {
+  props: {
+    accept: {
+      type: String,
+      default: ".xlsx, .xls"
+    }
+  },
   data() {
     return {
-      headers: ["รหัสนักศึกษา", "ชื่อ", "สกุล", "ปีการศึกษา", "GPAX"],
-      fileInput: []
+      fileInput: [],
+      dataFrame: {
+        header: [],
+        body: []
+      },
+      workbook: null
     };
   },
   methods: {
-    importData: function () {
+    importData: function() {
       if (this.fileInput.length > 0) {
         this.fileInput.forEach(data => {
-          firebase.database().ref('student/' + data.รหัสนักศึกษา).set({
-            firstname: data.ชื่อ,
-            lastname: data.สกุล,
-            year: data.ปีการศึกษา,
-            gpax: data.GPAX
-          })
-        })
+          firebase
+            .database()
+            .ref("student/" + data.รหัสนักศึกษา)
+            .set({
+              firstname: data.ชื่อ,
+              lastname: data.สกุล,
+              year: data.ปีการศึกษา,
+              gpax: data.GPAX
+            });
+        });
 
         // generate student user
         this.fileInput.forEach(data => {
-          firebase.database().ref('student_login/' + data.รหัสนักศึกษา).set({
-            username: data.รหัสนักศึกษา,
-            password: data.รหัสนักศึกษา.slice(4)
-          })
-        })
+          firebase
+            .database()
+            .ref("student_login/" + data.รหัสนักศึกษา)
+            .set({
+              username: data.รหัสนักศึกษา,
+              password: data.รหัสนักศึกษา.slice(4)
+            });
+        });
       }
     },
 
-    readXlsx: function (convertData) {
+    readXlsx: function(convertData) {
       convertData.body.forEach(data => {
-        this.fileInput.push(data)
-      })
+        this.fileInput.push(data);
+      });
+    },
+
+    handleUploadClick: function() {
+      this.clear();
+      this.$refs.uploadFile.click();
+    },
+    handleUploadChange: function(event) {
+      let files = event.target.files[0];
+      this.convertWorkbook(files)
+        .then(workbook => {
+          let xlsxArray = XLSX.utils.sheet_to_json(
+            workbook.Sheets[workbook.SheetNames[0]]
+          );
+          this.workbook = workbook;
+          this.initialTable(this.xlsxArrToTableArr(xlsxArray));
+          this.readXlsx(this.dataFrame)
+        })
+        .catch(() => {
+          this.$emit("SelectFile", false);
+        });
+    },
+    convertWorkbook: function(file) {
+      let reader = new FileReader();
+      let fix = data => {
+        let o = "",
+          l = 0,
+          w = 10240;
+        for (; l < data.byteLength / w; ++l) {
+          o += String.fromCharCode.apply(
+            null,
+            new Uint8Array(data.slice(l * w, l * w + w))
+          );
+        }
+        o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w)));
+        return o;
+      };
+      return new Promise((resolve, reject) => {
+        try {
+          reader.onload = event => {
+            let data = event.target.result;
+            if (this.rABS) {
+              resolve(XLSX.read(data, { type: "binary" }));
+            } else {
+              resolve(XLSX.read(btoa(fix(data)), { type: "base64" }));
+            }
+          };
+          reader.onerror = error => {
+            reject(error);
+          };
+          if (this.rABS) {
+            reader.readAsBinaryString(file);
+          } else {
+            reader.readAsArrayBuffer(file);
+          }
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
+    xlsxArrToTableArr: function(xlsxArray) {
+      let tableArray = [],
+        length = 0,
+        maxLength = 0,
+        maxLengthIndex = 0;
+      xlsxArray.forEach((item, index) => {
+        length = Object.keys(item).length;
+        if (maxLength < length) {
+          maxLength = length;
+          maxLengthIndex = index;
+        }
+      });
+      let tableHeader = Object.keys(xlsxArray[maxLengthIndex]);
+      let row = {};
+      xlsxArray.forEach(item => {
+        row = {};
+        for (let i = 0; i < maxLength; i++) {
+          row[tableHeader[i]] = item[tableHeader[i]] || "";
+        }
+        tableArray.push(row);
+      });
+      return {
+        header: tableHeader,
+        data: tableArray
+      };
+    },
+    tableArrToXlsxArr: function({ data, header }) {
+      let xlsxArray = [];
+      let temp = {};
+      data.forEach(row => {
+        temp = {};
+        row.forEach((item, index) => {
+          temp[header[index]] = item;
+        });
+        xlsxArray.push(temp);
+      });
+      return xlsxArray;
+    },
+    initialTable({ data, header }) {
+      this.dataFrame.header = header;
+      this.dataFrame.body = data;
+      this.$emit("SelectFile", this.dataFrame);
+    },
+    clear: function() {
+      this.$refs.uploadFile.value = null;
+      this.dataFrame = {
+        header: [],
+        body: []
+      };
+      this.workbook = null;
     }
   }
 };
