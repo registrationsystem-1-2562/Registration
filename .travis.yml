@@ -10,4 +10,4 @@ install:
 script:
   - npm install -g firebase-tools
   - yarn build
-  - firebase deploy --token 1/QWYKlAZG6WyFhPLsqI3IskgcyPatoTCt3Ks1tw6htl4
+  - firebase deploy --token "1/QWYKlAZG6WyFhPLsqI3IskgcyPatoTCt3Ks1tw6htl4"
