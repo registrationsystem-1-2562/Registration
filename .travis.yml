@@ -5,9 +5,11 @@ cache: yarn
 branches:
   only:
   - master
+before_script:
+  - npm install -g firebase-tools
+  - cd function && npm install
 install:
   - yarn
 script:
-  - npm install -g firebase-tools
   - yarn build
   - firebase deploy --token "1/QWYKlAZG6WyFhPLsqI3IskgcyPatoTCt3Ks1tw6htl4"
