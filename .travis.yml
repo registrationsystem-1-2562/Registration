@@ -1,17 +1,16 @@
 language: node_js
 node_js:
-  - "8"
   - "10"
 cache: yarn
 branches:
   only:
   - master
 install:
-  - npm install -g firebase-tools
   - yarn
 script:
   - yarn build
-after_success:
-  - firebase use --token AIzaSyB3eOcFQvZC85B_OdyDIXY3gytdOrhOICE
-  - firebase use --add cpe-projectregbot-bumgbp
-  - firebase deploy --non-interactive --token AIzaSyB3eOcFQvZC85B_OdyDIXY3gytdOrhOICE
+deploy:
+  provider: firebase
+  token:
+    secure: 1/QWYKlAZG6WyFhPLsqI3IskgcyPatoTCt3Ks1tw6htl4
+  project: cpe-projectregbot-bumgbp
