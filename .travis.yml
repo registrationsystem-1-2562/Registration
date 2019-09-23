@@ -13,4 +13,4 @@ install:
   - yarn
 script:
   - yarn build
-  - firebase deploy --token "$FIREBASE_TOKEN"
+  - firebase deploy --token "$FIREBASE_TOKEN" --non-interactive
