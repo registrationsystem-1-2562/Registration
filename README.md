@@ -1,4 +1,5 @@
 # project-registration-system
+[![Build Status](https://travis-ci.org/registrationsystem-1-2562/Registration.svg?branch=master)](https://travis-ci.org/registrationsystem-1-2562/Registration)
 
 ## Project setup
 ```
