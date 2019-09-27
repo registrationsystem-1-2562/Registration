@@ -193,6 +193,7 @@ export default {
         this.toggle = true;
       }
       this.selected = null;
+      this.$forceUpdate()
     }
   },
   created() {
