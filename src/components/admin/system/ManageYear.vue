@@ -111,7 +111,8 @@ export default {
             teacher = snapshot.teacher;
             if (maxGpax < snapshot.gpax) {
               maxGpax = snapshot.gpax;
-            } else if (minGpax > snapshot.gpax) {
+            } 
+            if (minGpax > snapshot.gpax) {
               minGpax = snapshot.gpax;
             }
             mean += snapshot.gpax;
