@@ -142,7 +142,7 @@ export const actions = {
           title: payload.title,
           information: payload.information,
           user: payload.user,
-          imageUrl: '',
+          imageUrl: payload.imageUrl,
           date:
               date.getDate() +
               "/" +
@@ -158,64 +158,65 @@ export const actions = {
         });
         commit('setLoading', false)
     },
-    createNoticeWithImage( {commit} , payload) {
-        commit('setLoading', true)
-        let date = new Date()
-        const message = {
-            title: payload.title,
-            information: payload.information,
-            user: payload.user,
-            date:
-              date.getDate() +
-              "/" +
-              (date.getMonth() + 1) +
-              "/" +
-              date.getFullYear() +
-              " " +
-              date.getHours() +
-              ":" +
-              date.getMinutes() +
-              ":" +
-              date.getSeconds()
-        }
-        let imageUrl
-        let key
-        let task
-        firebase.database().ref('test_notice/').push(message)
-            .then((data) =>{
-                key = data.key
-                return key
-            })
-            .then(key => {
-                const filename = payload.image.name
-                const ext = filename.slice(filename.lastIndexOf('.'))
-                 task = firebase.storage().ref('noticeImage/' + key + ext).put(payload.image)
-                return task
-            })
-            // get URL method.
-            .then(() => {
-                task.snapshot.ref.getDownloadURL().then((url) => {
-                    this.imageUrl = url
-                    // eslint-disable-next-line
-                    //console.log(this.imageUrl)
-                    return firebase.database().ref('test_notice').child(key).update({
-                        imageUrl: this.imageUrl
-                    })
-                })
-            })
-            .then(() => {
-                commit('createNotice', {
-                    ...message,
-                    imageUrl: imageUrl,
-                    id: key
-                })
-            })
-            .catch((error) => {
-                // eslint-disable-next-line
-                console.log(error)
-              })
-        commit('setLoading', false)
-    },
+    // createNoticeWithImage( {commit} , payload) {
+    //     commit('setLoading', true)
+    //     let date = new Date()
+    //     const message = {
+    //         title: payload.title,
+    //         information: payload.information,
+    //         user: payload.user,
+    //         imageUrl:'',
+    //         date:
+    //           date.getDate() +
+    //           "/" +
+    //           (date.getMonth() + 1) +
+    //           "/" +
+    //           date.getFullYear() +
+    //           " " +
+    //           date.getHours() +
+    //           ":" +
+    //           date.getMinutes() +
+    //           ":" +
+    //           date.getSeconds()
+    //     }
+    //     let imageUrl
+    //     let key
+    //     let task
+    //     firebase.database().ref('test_notice/').push(message)
+    //         .then((data) =>{
+    //             key = data.key
+    //             return key
+    //         })
+    //         .then(key => {
+    //             //const filename = payload.image.name
+    //             //const ext = filename.slice(filename.lastIndexOf('.'))
+    //              task = firebase.storage().ref('noticeImage/' + key).put(payload.image)
+    //             return task
+    //         })
+    //         // get URL method.
+    //         .then(() => {
+    //             task.snapshot.ref.getDownloadURL().then((url) => {
+    //                 this.imageUrl = url
+    //                 // eslint-disable-next-line
+    //                 //console.log(this.imageUrl)
+    //                 return firebase.database().ref('test_notice').child(key).update({
+    //                     imageUrl: this.imageUrl
+    //                 })
+    //             })
+    //         })
+    //         .then(() => {
+    //             commit('createNotice', {
+    //                 ...message,
+    //                 imageUrl: imageUrl,
+    //                 id: key
+    //             })
+    //         })
+    //         .catch((error) => {
+    //             // eslint-disable-next-line
+    //             console.log(error)
+    //           })
+    //     commit('setLoading', false)
+    // },
     showNotice({ commit }, payload) {
         commit('setLoading', true)
         firebase

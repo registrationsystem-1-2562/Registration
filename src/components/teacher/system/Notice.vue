@@ -26,30 +26,57 @@
                     v-model="information"
                   ></v-textarea>
                 </v-form>
-              <v-layout>
-                <v-flex xs3 xm1 offset-sm1>
-                  <v-btn raised class="green" @click="onPickFile">Add Picture</v-btn>
-                    <input 
-                      type="file" 
-                      style="display: none" 
-                      ref="fileInput" 
-                      accept="image/*"
-                      @change="onFilePicked"
-                    ></v-flex>
-                  <v-flex xs6 xm6 offset-sm1 v-if="image != null">
-                    <v-btn raised class="red" @click="removeFile">remove</v-btn>
-                  </v-flex>
-              </v-layout>
+  <div>
+    <v-btn
+      @click.native="selectFile"
+      v-if="!uploadEnd && !uploading">
+        add photo
+        <v-icon
+        right
+        aria-hidden="true">
+          
+        </v-icon>
+    </v-btn>
+    <form ref="form">
+      <input
+        id="files"
+        type="file"
+        name="file"
+        ref="uploadInput"
+        accept="image/*"
+        :multiple="false"
+        @change="detectFiles($event)" />
+    </form>
+    <v-progress-circular
+      v-if="uploading && !uploadEnd"
+      :size="100"
+      :width="15"
+      :rotate="360"
+      :value="progressUpload"
+      color="primary">
+      {{ progressUpload }}%
+    </v-progress-circular>
+    <img
+      v-if="uploadEnd"
+      :src="downloadURL"
+      width="50%" />
+    <div v-if="uploadEnd">
+      <v-btn
+        class="ma-0"
+        dark
+        small
+        color="error"
+        @click="deleteImage()"
+        >
+        Delete
+      </v-btn>
+    </div>
+  </div>
               </v-card-text>
-                <v-layout v-if="image != null">
-                  <v-flex xs12 xm4 offset-sm2>
-                    <img :src="imageUrl" height="200">
-                  </v-flex>
-                </v-layout>
               <v-card-actions>
                 <v-spacer></v-spacer>
                  <v-btn @click="clearMessage" color="#abb2b9">Clear</v-btn>
-                 <v-btn @click="selectPost" color="primary">Post</v-btn>
+                 <v-btn @click="storeMessage" color="primary">Post</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -59,7 +86,7 @@
     
     <v-container dense v-for="(message, index) in notices" :key="index">
       <!---->
-      <div>
+      <div v-if="message.user == user">
         <v-card class="mx-auto" max-width="70%">
           <!--color="#ffe4c4" -->
           <v-alert border="top" colored-border color="info accent-4" elevation="2">
@@ -73,7 +100,7 @@
               </v-layout>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <!--<v-btn depressed color="primary">Edit</v-btn>-->
+              <!--<v-btn depressed color="primary">Edit</v-btn>@click="deletePost"-->
               <v-btn depressed color="error">Delete</v-btn>
             </v-card-actions>
           </v-responsive>
@@ -89,6 +116,7 @@
 // eslint-disable-next-line
 import firebase from 'firebase'
 
+
 export default {
   data() {
     return {
@@ -97,91 +125,95 @@ export default {
       information: "",
       user: this.$store.getters.getUser,
       notices: [],
-      notice:{},
-      imageUrl: null,
-      image: null
+      progressUpload: 0,
+      fileName: '',
+      uploadTask: '',
+      uploading: false,
+      uploadEnd: false,
+      downloadURL: ''
     };
   },
   methods: {
-    selectPost: function(){
-      if(this.image === null){
-        this.storeMessage()
-      }
-      else{
-        this.storeMessageAndImage()
-      }
-    },
     storeMessage: function() {
-      const messageData ={
-          title: this.title,
-          information: this.information,
-          user: this.user
-      }
-      this.$store.dispatch("createNotice", messageData)
-      this.title = ""
-      this.information = ""
-    },
-    storeMessageAndImage: function() {
-      const messageData ={
+      const messageData1 ={
           title: this.title,
           information: this.information,
           user: this.user,
-          image: this.image
+          fileName: this.fileName,
+          imageUrl: this.downloadURL
       }
-      this.$store.dispatch("createNoticeWithImage", messageData)
-      this.title = ""
-      this.information = ""
-      this.image = null
+      this.$store.dispatch("createNotice", messageData1)
+      this.title = " "
+      this.information = " "
+      this.downloadURL = " "
+      this.uploading = false
+      this.uploadEnd = false
     },
     clearMessage: function() {
-      this.title = ""
-      this.information = ""
-      this.image = null
+      this.title = " "
+      this.information = " "
+      this.downloadURL = " "
+      this.deleteImage()
+      this.uploading = false
+      this.uploadEnd = false
     },
-    removeFile: function(){
-      this.image = null
+    selectFile () {
+      this.$refs.uploadInput.click()
     },
-    onPickFile(){
-        this.$refs.fileInput.click()
+    detectFiles (e) {
+      let fileList = e.target.files || e.dataTransfer.files
+      Array.from(Array(fileList.length).keys()).map(x => {
+        this.upload(fileList[x])
+      })
     },
-    onFilePicked(event){
-        const files = event.target.files
-        let filesname = files[0].name
-        if (filesname.lastIndexOf('.') <= 0){
-            return alert("please add a valid file!")
-        }
-        const reader = new FileReader();
-         reader.addEventListener('load', () => {
-             this.imageUrl = reader.result
-         })
-         reader.readAsDataURL(files[0])
-          if (files[0].size > 1024 * 1024) {
-            alert('File too big (> 1 mb)');
-            this.image = null
-          }
-          else{
-          this.image = files[0]
-          }
+    upload (file) {
+      this.fileName = file.name
+      this.uploading = true
+      this.uploadTask = firebase.storage().ref('noticeImage/' + file.name).put(file)
+    },
+    deleteImage () {
+        firebase.storage().ref('noticeImage/' + this.fileName).delete()
+        .then(() => {
+          this.uploading = false
+          this.uploadEnd = false
+          this.downloadURL = ''
+        })
+        .catch((error) => {
+          console.error(`file delete error occured: ${error}`)
+        })
+      this.$refs.form.reset()
     }
+  },
+  watch: {
+    uploadTask: function () {
+      this.uploadTask.on('state_changed', sp => {
+        this.progressUpload = Math.floor(sp.bytesTransferred / sp.totalBytes * 100)
+      },
+      null,
+      () => {
+        this.uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+          this.uploadEnd = true
+          this.downloadURL = downloadURL
+          this.$emit('downloadURL', downloadURL)
+          //console.log(this.downloadURL)
+        })
+      })
+    }
+  
   },
   created() {
     this.$store.dispatch("showNotice", this.notices);
-    this.notices.forEach(value => {
-      if (value.user === this.user) {
-        this.notice = value
-        //console.log(value.id)
-        //console.log(this.notice.id)
-        // eslint-disable-next-line
-        // console.log("value user" + ' ' + value.user)
-        // console.log("This user" + ' ' + this.user)
-        // console.log("notice title" + ' ' + this.notice.title)
-        // console.log("notice information" + ' ' + this.notice.information)
-        // console.log("notice date" + ' ' + this.notice.date)
-        // console.log("notice user" + ' ' + this.notice.user)
-        // console.log("notice image url" + ' ' + this.notice.imageUrl)
-        // console.log("++++++++++++++++++++++++++++++++")
-      }
-    });    
+    // eslint-disable-next-line
+    console.log(this.user)
   }
 };
 </script>
+<style>
+.progress-bar {
+  margin: 10px 0;
+}
+input[type="file"] {
+  position: absolute;
+  clip: rect(0,0,0,0);
+}
+</style>
