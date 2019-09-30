@@ -100,8 +100,8 @@
               </v-layout>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <!--<v-btn depressed color="primary">Edit</v-btn>@click="deletePost"-->
-              <v-btn depressed color="error">Delete</v-btn>
+              <!--<v-btn depressed color="primary">Edit</v-btn>-->
+              <v-btn depressed color="error" @click="deletePost(message.id)">Delete</v-btn>
             </v-card-actions>
           </v-responsive>
           </v-alert>
@@ -192,6 +192,11 @@ export default {
           console.error(`file delete error occured: ${error}`)
         })
       this.$refs.form.reset()
+    },
+    deletePost(index){
+      console.log(index);
+      firebase.database().ref('test_notice').child(index).remove()
+      
     }
   },
   watch: {
@@ -213,15 +218,13 @@ export default {
   },
   created() {
     this.$store.dispatch("showNotice", this.notices);
-    // eslint-disable-next-line
-    console.log(this.user)
 
     firebase.database().ref("student").on("child_added", snapshot => {
           this.studentStatus.push({
                 id: snapshot.key
                 
           });
-          console.log(this.studentStatus);
+          //console.log(this.studentStatus);
       });
   }
 };
