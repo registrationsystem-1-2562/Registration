@@ -28,6 +28,7 @@ import SelectProject from '../components/student/system/SelectProject'
 import ViewProfile from '../components/student/system/ViewProfile'
 import ViewProject from '../components/student/system/ViewProject'
 import StudentProfile from '../components/student/system/Profile'
+import Notifications from '../components/student/system/Notifications'
 
 Vue.use(Router)
 
@@ -136,6 +137,10 @@ export default new Router({
                 {
                     path: 'profile',
                     component: StudentProfile
+                },
+                {
+                    path: 'notifications',
+                    component: Notifications
                 }
             ]
         }
