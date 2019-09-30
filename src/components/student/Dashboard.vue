@@ -98,6 +98,7 @@ export default {
   },
   methods:{
     ChangeStatus:function(){
+      this.noticeStatus[0].status = false;
       firebase.database().ref('noticeStatus/').child(this.user).update({
           status: false
         })
