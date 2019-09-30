@@ -130,7 +130,8 @@ export default {
       uploadTask: '',
       uploading: false,
       uploadEnd: false,
-      downloadURL: ''
+      downloadURL: '',
+      studentStatus:[]
     };
   },
   methods: {
@@ -148,6 +149,15 @@ export default {
       this.downloadURL = " "
       this.uploading = false
       this.uploadEnd = false
+
+      this.NoticeStatus()
+    },
+    NoticeStatus:function(){
+      this.studentStatus.forEach(student => {
+        firebase.database().ref('noticeStatus/' + student.id).set({
+          status: true
+        })
+      })
     },
     clearMessage: function() {
       this.title = " "
@@ -205,6 +215,14 @@ export default {
     this.$store.dispatch("showNotice", this.notices);
     // eslint-disable-next-line
     console.log(this.user)
+
+    firebase.database().ref("student").on("child_added", snapshot => {
+          this.studentStatus.push({
+                id: snapshot.key
+                
+          });
+          console.log(this.studentStatus);
+      });
   }
 };
 </script>

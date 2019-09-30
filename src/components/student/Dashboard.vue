@@ -37,6 +37,19 @@
             <v-list-item-title>ข้อมูลอาจารย์ที่ปรึกษา</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item link to="notifications"  @click="ChangeStatus" > <!-- @click="noticeStatus[0].status = false" -->
+          <v-list-item-action >
+            <v-badge color="green" overlap>
+              <template v-slot:badge>
+                <span v-if="noticeStatus[0].status == true">!</span>
+              </template>
+              <v-icon>mdi-email</v-icon>
+            </v-badge>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>ข่าวประกาศ</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
       <v-container>
         <h6 class="title">ระบบ</h6>
@@ -72,11 +85,35 @@
 </template>
 
 <script>
+import firebase from 'firebase'
+
 export default {
   data() {
     return {
       drawer: null,
+      //messages: 2,
+      noticeStatus:[],
+      user:this.$store.getters.getUser
     };
+  },
+  methods:{
+    ChangeStatus:function(){
+      firebase.database().ref('noticeStatus/').child(this.user).update({
+          status: false
+        })
+    }
+  },
+  created(){
+    firebase.database().ref('noticeStatus').on("child_added", snapshot => {
+      if(snapshot.key == this.user){
+        this.noticeStatus.push({
+          id: snapshot.key,
+          ...snapshot.val()
+        });
+        console.log(this.noticeStatus);
+        
+      }
+    })
   }
 };
 </script>
