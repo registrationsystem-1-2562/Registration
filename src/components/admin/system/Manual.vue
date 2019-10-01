@@ -125,7 +125,7 @@ export default {
     message: "",
     toggle: false,
     years: [],
-    result: [],
+    result: []
   }),
   methods: {
     getYear: function(year) {
@@ -173,19 +173,19 @@ export default {
     },
     registerSave: function() {
       if (this.selected && this.teach !== "") {
-
         this.selected.forEach(res => {
           this.result.push({
             gpax: res.gpax,
             student: res.id,
             teacher: this.teach.value
-          })
-        })
-        
+          });
+        });
+
         firebase
           .database()
           .ref("result_register/" + this.$store.getters.getSchoolYear)
           .set(this.result);
+        this.getRegStudent();
         this.message = "บันทึกสำเร็จ";
         this.toggle = true;
       } else {
@@ -193,7 +193,7 @@ export default {
         this.toggle = true;
       }
       this.selected = null;
-      this.$forceUpdate()
+      this.$forceUpdate();
     }
   },
   created() {
@@ -244,6 +244,6 @@ export default {
       });
 
     this.$store.commit("setLoading", false);
-  }
+  },
 };
 </script>

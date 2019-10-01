@@ -30,6 +30,7 @@
             <v-simple-table>
               <thead>
                 <tr>
+                  <th>image</th>
                   <th>รหัสนักศึกษา</th>
                   <th>ชื่อ</th>
                   <th>สกุล</th>
@@ -39,6 +40,7 @@
               </thead>
               <tbody>
                 <tr v-for="file in fileInput" :key="file.รหัสนักศึกษา">
+                  <td>{{ file.image }}</td>
                   <td>{{ file.รหัสนักศึกษา }}</td>
                   <td>{{ file.ชื่อ }}</td>
                   <td>{{ file.สกุล }}</td>
@@ -49,6 +51,9 @@
             </v-simple-table>
           </v-flex>
         </v-card-text>
+        <v-snackbar v-model="snackbar">
+
+        </v-snackbar>
       </v-card>
     </v-layout>
   </v-container>
@@ -73,7 +78,9 @@ export default {
         header: [],
         body: []
       },
-      workbook: null
+      workbook: null,
+      snackbar: null,
+      message: ''
     };
   },
   methods: {
@@ -84,6 +91,7 @@ export default {
             .database()
             .ref("student/" + data.รหัสนักศึกษา)
             .set({
+              image: data.image,
               firstname: data.ชื่อ,
               lastname: data.สกุล,
               year: data.ปีการศึกษา,
@@ -101,7 +109,12 @@ export default {
               password: data.รหัสนักศึกษา.slice(4)
             });
         });
+        this.fileInput = []
+        this.message = "Upload สำเร็จ" 
+      } else {
+        this.message = "Upload ไม่สำเร็จ"
       }
+      this.snackbar = !this.snackbar
     },
 
     readXlsx: function(convertData) {

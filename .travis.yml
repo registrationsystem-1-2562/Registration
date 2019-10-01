@@ -13,5 +13,5 @@ install:
   - yarn
 script:
   - yarn build
-  - firebase deploy --token "$FIREBASE_TOKEN" --non-interactive --allow-deletes
+  - firebase deploy --token "$FIREBASE_TOKEN" --non-interactive
   # --ignore-missing-functions --allow-deletes

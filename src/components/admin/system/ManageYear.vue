@@ -135,7 +135,7 @@ export default {
       let regStudent = []
       firebase
         .database()
-        .ref("lecturer_register" + this.$store.getters.getSchoolYear)
+        .ref("lecturer_register/" + this.$store.getters.getSchoolYear)
         .on("child_added", snapshot => {
           regStudent.push({
             id: snapshot.key,
