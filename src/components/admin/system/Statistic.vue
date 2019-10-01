@@ -97,7 +97,14 @@ export default {
         hover: {
           animationDuration: 0
         },
-        responsiveAnimationDuration: 0
+        responsiveAnimationDuration: 0,
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
       }
     };
   },
