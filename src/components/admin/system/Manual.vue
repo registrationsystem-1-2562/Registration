@@ -192,8 +192,13 @@ export default {
         this.message = "ไม่สามารถบันทึกได้";
         this.toggle = true;
       }
-      this.selected = null;
-      this.$forceUpdate();
+
+      this.selected.forEach(se => {
+        let remove = this.student.find(st => st.id === se.id);
+        let index = this.student.indexOf(remove);
+        this.student.splice(index, 1);
+      });
+      this.selected = []
     }
   },
   created() {
@@ -244,6 +249,6 @@ export default {
       });
 
     this.$store.commit("setLoading", false);
-  },
+  }
 };
 </script>

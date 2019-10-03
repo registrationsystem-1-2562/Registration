@@ -5,7 +5,7 @@
       <v-spacer></v-spacer>
 
       <vue-json-to-csv
-        csv-title="statistic"
+        :csv-title="csvTitle"
         :json-data="records"
         :labels="{teacher: {title: 'teacher'}, 
                     register: {title: 'register'},
@@ -105,7 +105,8 @@ export default {
             }
           }]
         }
-      }
+      },
+      csvTitle: 'statistic' + new Date()
     };
   },
   created() {

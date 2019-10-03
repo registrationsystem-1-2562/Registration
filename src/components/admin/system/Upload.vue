@@ -40,7 +40,9 @@
               </thead>
               <tbody>
                 <tr v-for="file in fileInput" :key="file.รหัสนักศึกษา">
-                  <td>{{ file.image }}</td>
+                  <td>
+                    <img :src="file.image" width="300" height="400">
+                  </td>
                   <td>{{ file.รหัสนักศึกษา }}</td>
                   <td>{{ file.ชื่อ }}</td>
                   <td>{{ file.สกุล }}</td>
