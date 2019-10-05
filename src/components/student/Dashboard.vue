@@ -37,9 +37,9 @@
             <v-list-item-title>ข้อมูลอาจารย์ที่ปรึกษา</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link to="notifications"  @click="ChangeStatus" > <!-- @click="noticeStatus[0].status = false" -->
+        <v-list-item link to="notifications"  @click="ChangeStatus" >
           <v-list-item-action >
-            <v-badge color="green" overlap>
+            <v-badge color="red" overlap>
               <template v-slot:badge>
                 <span v-if="noticeStatus[0].status == true">!</span>
               </template>
@@ -47,7 +47,7 @@
             </v-badge>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>ข่าวประกาศ</v-list-item-title>
+            <v-list-item-title>ประกาศข่าว</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -70,6 +70,21 @@
     <v-app-bar app color="primary" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>Project Registration System</v-toolbar-title>
+      <v-row class="pa-5">
+      <v-list-item  link to="notifications"  @click="ChangeStatus" v-if='noticeStatus[0].status == true'>
+          <v-list-item-action>
+            <v-badge color="red" overlap>
+              <template v-slot:badge>
+                <v-icon v-if="noticeStatus[0].status == true">mdi-message-text</v-icon>
+              </template>
+              <v-icon>mdi-email</v-icon>
+            </v-badge>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>ประกาศข่าวใหม่</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        </v-row>
     </v-app-bar>
 
     <v-content>

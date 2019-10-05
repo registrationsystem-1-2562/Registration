@@ -2,7 +2,7 @@
  <v-container>
     <v-container row >
       <v-spacer></v-spacer>
-      <h4 class="display-1">ประกาศข่าวทั้งหมด</h4>
+      <h4 class="display-1">ประกาศข่าว</h4>
       <v-spacer></v-spacer>
     </v-container>
     <v-container dense v-for="(message, i) in notices" :key="i">
