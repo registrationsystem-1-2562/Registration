@@ -34,9 +34,9 @@
           </v-flex>
         </v-layout>
       </v-card-text>
-      <v-card-actions>
+      <!-- <v-card-actions>
           <v-btn raised color="primary">แก้ไข</v-btn>
-      </v-card-actions>
+      </v-card-actions> -->
     </v-card>
     <v-card class="mx-auto" max-width="40%" color>
       <v-toolbar color="primary">
