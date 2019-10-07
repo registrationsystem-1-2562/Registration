@@ -75,6 +75,7 @@ export default {
   methods:{
     showList:function(){
       let user = this.user
+      
       firebase
       .database()
         .ref("result_register/" + this.selectYear)
