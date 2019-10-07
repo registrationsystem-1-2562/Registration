@@ -21,7 +21,7 @@
   
             <vue-json-to-csv
               :csv-title="csvTitle"
-              :json-data="studentList"
+              :json-data="studentRegister"
               :labels="{id: {title: 'รหัสนักศึกษา'}, 
                         name: {title: 'ชื่อ-นามสกุล'},
                         gpax: {title: 'เกรดเฉลี่ย'},
@@ -36,7 +36,7 @@
           </v-row>
                      
           <v-flex>
-            <v-data-table :headers="headers" :items="studentList" :sort-by="['id']"></v-data-table>
+            <v-data-table :headers="headers" :items="studentRegister" :sort-by="['id']"></v-data-table>
           </v-flex>
         </v-layout>
       </v-card-text>
@@ -64,11 +64,12 @@ export default {
         {text: "ชื่อ - สกุล", value: "name"},
         {text: "GPAX",value: "gpax"}
       ],
-      studentList:[],
-      registerList:[],
+      studentRegister:[],
+      //allStudent:[],
+      //registerList:[],
       year:[],
       studentId:[],
-      csvTitle: 'Student List Project'
+      csvTitle: 'CPE-Project Register_Student-List'
     };
   },
   methods:{
@@ -80,34 +81,32 @@ export default {
         .orderByChild('teacher')
         .equalTo(user)
         .on("child_added", snapshot => {
-          this.registerList.push(snapshot.val())
+          //this.registerList.push(snapshot.val())
           this.studentId.push(snapshot.val().student) 
-          this.findStudent()
         })
-       
-        console.log(this.studentList);
+        this.findStudent()       
+        console.log(this.studentRegister);
         console.log(this.selectYear);
-        console.log(this.registerList);
+        //console.log(this.registerList);
         console.log(this.studentId);  
         console.log(user);
         
     },
-    findStudent:function(){      
-       for(let i=0; i<this.studentId.length; i++) {
-          firebase
+    findStudent:function(){
+      for(let i = 0; i < this.studentId.length; i++) {
+        firebase
             .database()
             .ref("student/" + this.studentId[i])
             .once("value")
             .then(snapshot => {
-              this.studentList.push({
+              this.studentRegister.push({
                 name: snapshot.val().firstname + " " + snapshot.val().lastname,
                 id: this.studentId[i],
                 gpax: snapshot.val().gpax
               })
            
             });
-            continue
-        }
+      }
     },
   },
   mounted() {
@@ -117,9 +116,20 @@ export default {
           .on("child_added", snapshot => {
             this.year.push({ id: snapshot.key })
           })
-      console.log(this.selectYear);
-      
-      
+
+    // firebase
+    //   .database()
+    //     .ref("student")
+    //       .on("child_added", snapshot => {
+    //         this.allStudent.push({ 
+    //           name: snapshot.val().firstname + " " + snapshot.val().lastname,
+    //           id: snapshot.key,
+    //           gpax: snapshot.val().gpax
+    //         })
+    //       })
+    //   console.log(this.allStudent);   
+    //   console.log(this.selectYear);   
   },
+  
 };
 </script>
