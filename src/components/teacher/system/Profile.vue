@@ -136,7 +136,7 @@ export default {
     return {
       profiles: [],
       profile: {},
-      user: "A0001",
+      user: this.$store.getters.getUser,
       profileInput:[]
     };
   },

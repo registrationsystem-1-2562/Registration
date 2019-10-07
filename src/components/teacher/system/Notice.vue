@@ -194,7 +194,7 @@ export default {
       this.$refs.form.reset()
     },
     deletePost(id,index){
-      console.log(id);
+      //console.log(id);
       firebase.database().ref('test_notice').child(id).remove()
       this.notices.splice(index,1)
       
