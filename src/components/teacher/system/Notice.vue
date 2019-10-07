@@ -26,52 +26,52 @@
                     v-model="information"
                   ></v-textarea>
                 </v-form>
-  <div>
-    <v-btn
-      @click.native="selectFile"
-      v-if="!uploadEnd && !uploading">
-        add photo
-        <v-icon
-        right
-        aria-hidden="true">
-          
-        </v-icon>
-    </v-btn>
-    <form ref="form">
-      <input
-        id="files"
-        type="file"
-        name="file"
-        ref="uploadInput"
-        accept="image/*"
-        :multiple="false"
-        @change="detectFiles($event)" />
-    </form>
-    <v-progress-circular
-      v-if="uploading && !uploadEnd"
-      :size="100"
-      :width="15"
-      :rotate="360"
-      :value="progressUpload"
-      color="primary">
-      {{ progressUpload }}%
-    </v-progress-circular>
-    <img
-      v-if="uploadEnd"
-      :src="downloadURL"
-      width="50%" />
-    <div v-if="uploadEnd">
-      <v-btn
-        class="ma-0"
-        dark
-        small
-        color="error"
-        @click="deleteImage()"
-        >
-        Delete
-      </v-btn>
-    </div>
-  </div>
+                <div>
+                  <v-btn
+                    @click.native="selectFile"
+                    v-if="!uploadEnd && !uploading">
+                      add photo
+                      <v-icon
+                      right
+                      aria-hidden="true">
+                        
+                      </v-icon>
+                  </v-btn>
+                  <form ref="form">
+                    <input
+                      id="files"
+                      type="file"
+                      name="file"
+                      ref="uploadInput"
+                      accept="image/*"
+                      :multiple="false"
+                      @change="detectFiles($event)" />
+                  </form>
+                  <v-progress-circular
+                    v-if="uploading && !uploadEnd"
+                    :size="100"
+                    :width="15"
+                    :rotate="360"
+                    :value="progressUpload"
+                    color="primary">
+                    {{ progressUpload }}%
+                  </v-progress-circular>
+                  <img
+                    v-if="uploadEnd"
+                    :src="downloadURL"
+                    width="50%" />
+                  <div v-if="uploadEnd">
+                    <v-btn
+                      class="ma-0"
+                      dark
+                      small
+                      color="error"
+                      @click="deleteImage()"
+                      >
+                      Delete
+                    </v-btn>
+                  </div>
+                </div>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -101,7 +101,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <!--<v-btn depressed color="primary">Edit</v-btn>-->
-              <v-btn depressed color="error" @click="deletePost(message.id)">Delete</v-btn>
+              <v-btn depressed color="error" @click="deletePost(message.id,index)">Delete</v-btn>
             </v-card-actions>
           </v-responsive>
           </v-alert>
@@ -193,9 +193,10 @@ export default {
         })
       this.$refs.form.reset()
     },
-    deletePost(index){
-      console.log(index);
-      firebase.database().ref('test_notice').child(index).remove()
+    deletePost(id,index){
+      console.log(id);
+      firebase.database().ref('test_notice').child(id).remove()
+      this.notices.splice(index,1)
       
     }
   },
