@@ -189,6 +189,7 @@ export default {
           this.downloadURL = ''
         })
         .catch((error) => {
+          // eslint-disable-next-line
           console.error(`file delete error occured: ${error}`)
         })
       this.$refs.form.reset()

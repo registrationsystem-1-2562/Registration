@@ -28,7 +28,7 @@
       </v-container>
       <v-divider></v-divider>
       <v-list dense>
-        <v-list-item link replace to="teacher">
+        <v-list-item link replace to="notice">
           <v-list-item-action>
             <v-icon>mdi-package</v-icon>
           </v-list-item-action>

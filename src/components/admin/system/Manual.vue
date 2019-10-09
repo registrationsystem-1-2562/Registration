@@ -198,7 +198,7 @@ export default {
         let index = this.student.indexOf(remove);
         this.student.splice(index, 1);
       });
-      this.selected = []
+      this.selected = [];
     }
   },
   created() {
