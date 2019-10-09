@@ -17,7 +17,7 @@
         </v-flex>
         <v-spacer></v-spacer>
         <v-flex xs12 sm6 md4 d-flex>
-          <v-btn color="primary" class="mx-auto" @click="resultRegister">จัดที่นักศึกษา</v-btn>
+          <v-btn color="primary" class="mx-auto" @click="resultRegister" :loading="loading">จัดที่นักศึกษา</v-btn>
           <v-btn color="primary" class="mx-auto" @click="statisticData">เก็บข้อมูลการจัดอันดับ</v-btn>
         </v-flex>
       </v-layout>
@@ -69,7 +69,8 @@ export default {
       studentRegister: [],
       teacherCount: [],
       warningResult: false,
-      warningStat: false
+      warningStat: false,
+      loading: false
     };
   },
   methods: {
@@ -171,13 +172,14 @@ export default {
       this.register = [];
       this.warningStat = true;
     },
-    resultRegister: function() {
+    resultRegister:async function() {
       /**
        * Very Difficult
        */
-      
-      this.studentRegister.forEach(student => {
-        let remainer = true;
+      this.loading = true
+      let remainer = true;
+      await this.studentRegister.forEach(student => {
+        
         for (let i = 0; i < student.teacher.length; i++) {
           let teacher = this.teacherRegister.find(
             teach => teach.id === student.teacher[i]
@@ -217,11 +219,13 @@ export default {
         }
       });
 
-      firebase
+      await firebase
         .database()
         .ref("result_register/" + this.$store.getters.getSchoolYear)
-        .set({ ...this.result });
-      this.warningResult = true;
+        .set({ ...this.result }).then(() => {
+          this.warningResult = true;
+        })
+      this.loading = false
     }
   },
   created() {
