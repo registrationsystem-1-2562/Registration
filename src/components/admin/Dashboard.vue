@@ -30,7 +30,7 @@
       <v-list dense>
         <v-list-item link replace to="notice">
           <v-list-item-action>
-            <v-icon>mdi-package</v-icon>
+            <v-icon>mdi-clipboard-text</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>จัดการประกาศ</v-list-item-title>
@@ -38,10 +38,10 @@
         </v-list-item>
         <v-list-item link replace to="teacher">
           <v-list-item-action>
-            <v-icon>mdi-package</v-icon>
+            <v-icon>mdi-account-group</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>จัดการอาจารย์ที่ปรึกษา</v-list-item-title>
+            <v-list-item-title>จัดที่นั่งอาจารย์ที่ปรึกษา</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item link replace to="schoolyear">
