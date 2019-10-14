@@ -57,7 +57,7 @@ export default {
   data() {
     return {
       dialog: null,
-      selectYear: new Date().getFullYear() + 543,
+      selectYear: '',
       user: this.$store.getters.getUser,
       headers: [
         {text: "รหัสนักศึกษา", value: "id"},
@@ -65,8 +65,6 @@ export default {
         {text: "GPAX",value: "gpax"}
       ],
       studentRegister:[],
-      //allStudent:[],
-      //registerList:[],
       year:[],
       studentId:[],
       csvTitle: 'CPE-Project Register_Student-List'
@@ -74,24 +72,25 @@ export default {
   },
   methods:{
     showList:function(){
-      let user = this.user
+       this.$store.commit("setLoading", true);
+       this.studentRegister = [];
+       this.studentId = [];
       
       firebase
       .database()
         .ref("result_register/" + this.selectYear)
         .orderByChild('teacher')
-        .equalTo(user)
+        .equalTo(this.user)
         .on("child_added", snapshot => {
           //this.registerList.push(snapshot.val())
           this.studentId.push(snapshot.val().student) 
         })
+
         this.findStudent()       
         console.log(this.studentRegister);
         console.log(this.selectYear);
-        //console.log(this.registerList);
         console.log(this.studentId);  
-        console.log(user);
-        
+        //console.log(this.user);
     },
     findStudent:function(){
       for(let i = 0; i < this.studentId.length; i++) {
@@ -117,19 +116,6 @@ export default {
           .on("child_added", snapshot => {
             this.year.push({ id: snapshot.key })
           })
-
-    // firebase
-    //   .database()
-    //     .ref("student")
-    //       .on("child_added", snapshot => {
-    //         this.allStudent.push({ 
-    //           name: snapshot.val().firstname + " " + snapshot.val().lastname,
-    //           id: snapshot.key,
-    //           gpax: snapshot.val().gpax
-    //         })
-    //       })
-    //   console.log(this.allStudent);   
-    //   console.log(this.selectYear);   
   },
   
 };
