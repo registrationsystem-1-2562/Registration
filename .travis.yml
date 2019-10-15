@@ -20,5 +20,5 @@ script:
 after_success:
   - firebase use --token ${FIREBASE_TOKEN}
   - firebase use --add ${PEOJECT_ID}
-  - firebase deploy --token "$FIREBASE_TOKEN" --non-interactive
+  - firebase deploy --token "{$FIREBASE_TOKEN}" --non-interactive
   # --ignore-missing-functions --allow-deletes

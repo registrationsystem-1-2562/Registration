@@ -17,6 +17,7 @@ import ManageYear from '../components/admin/system/ManageYear'
 import Manual from '../components/admin/system/Manual'
 import ManageTeacher from '../components/admin/system/ManageTeacher'
 import NoticeAdmin from '../components/admin/system/Notice'
+import SeatTeacher from '../components/admin/system/SeatTeacher'
 
 // teacher component
 import TeacherDashBoard from '../components/teacher/Dashboard'
@@ -97,6 +98,10 @@ export default new Router({
                 {
                     path: 'notice',
                     component: NoticeAdmin
+                },
+                {
+                    path: 'seat',
+                    component: SeatTeacher
                 }
             ]
         },
