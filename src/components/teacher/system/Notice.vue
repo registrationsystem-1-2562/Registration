@@ -113,7 +113,6 @@
 
 
 <script>
-// eslint-disable-next-line
 import firebase from 'firebase'
 
 

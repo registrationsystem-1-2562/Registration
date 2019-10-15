@@ -45,6 +45,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import firebase from 'firebase'
 import Seat from "./parts/Seat";
 import VueJsonToCsv from "vue-json-to-csv";
