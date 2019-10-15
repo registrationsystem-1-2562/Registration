@@ -19,6 +19,6 @@ script:
   - yarn build
 after_success:
   - firebase use --token ${FIREBASE_TOKEN}
-  - firebase use --add ${PEOJECT_ID}
+  - firebase use --add ${PROJECT_ID}
   - firebase deploy --token "{$FIREBASE_TOKEN}" --non-interactive
   # --ignore-missing-functions --allow-deletes
